@@ -1,15 +1,17 @@
 /* -----------------------------------------------------------
-   CORE GAME STATE (LOCAL ONLY)
+   CORE GAME STATE (LOCAL ONLY, CLEAN + CORRECT)
 ----------------------------------------------------------- */
 
 let players = [];       // [{ name, raceId }]
 let passedOrder = [];   // [playerName, ...]
-let lastPassed = null;
 let turn = 1;
 
-/** Ensure players array has at least count items (fill with blanks). */
+/* ------------------ PLAYER SETUP ------------------ */
+
 function setPlayerCount(count) {
     const n = parseInt(count, 10) || 0;
+
+    // Grow or shrink players array
     if (n < players.length) {
         players = players.slice(0, n);
     } else {
@@ -17,39 +19,55 @@ function setPlayerCount(count) {
             players.push({ name: "", raceId: null });
         }
     }
-    passedOrder = [];
-    lastPassed = null;
-    turn = 1;
+
+    resetRoundState();
 }
 
-/** Update a player's name. */
 function setPlayerName(index, name) {
-    if (!players[index]) {
-        players[index] = { name: "", raceId: null };
-    }
     players[index].name = name.trim();
 }
 
-/** Update a player's race ID. */
 function setPlayerRace(index, raceId) {
-    if (!players[index]) {
-        players[index] = { name: "", raceId: null };
+    const current = players[index].raceId;
+
+    // Free old race
+    if (current) {
+        usedRaces.delete(current);
     }
+
+    // Assign new race
     players[index].raceId = raceId;
+
+    // Lock new race
+    usedRaces.add(raceId);
 }
 
-/** Active = players that actually have a name + race. */
+/* ------------------ RACE LOCKING ------------------ */
+
+const usedRaces = new Set();
+
+function isRaceAvailable(raceId) {
+    return !usedRaces.has(raceId);
+}
+
+/* ------------------ ACTIVE PLAYERS ------------------ */
+
 function getActivePlayers() {
     return players.filter(p => p.name && p.raceId);
 }
 
-/** Have all active players passed? */
 function allPlayersPassed() {
     const active = getActivePlayers();
-    return active.length > 0 && passedOrder.length >= active.length;
+    return active.length > 0 && passedOrder.length === active.length;
 }
 
-/** Randomise player order for a new round, keeping empty slots intact. */
+/* ------------------ ROUND LOGIC ------------------ */
+
+function resetRoundState() {
+    passedOrder = [];
+    turn = 1;
+}
+
 function randomisePlayerOrder() {
     const active = getActivePlayers();
 
@@ -59,31 +77,26 @@ function randomisePlayerOrder() {
         [active[i], active[j]] = [active[j], active[i]];
     }
 
-    // Rebuild full players array
-    let activeIndex = 0;
+    // Reinsert into full players array
+    let idx = 0;
     players = players.map(p => {
         if (p.name && p.raceId) {
-            return active[activeIndex++];
+            return active[idx++];
         }
         return p;
     });
 
-    passedOrder = [];
-    lastPassed = null;
-    turn = 1;
+    resetRoundState();
 }
 
-/**
- * Mark given player (by index) as passed.
- * When all players have passed, reorder players based on pass order.
- */
-function markPassedByIndex(index) {
-    const player = players[index];
-    if (!player) return;
+/* ------------------ PASSING ------------------ */
 
-    if (!passedOrder.includes(player.name)) {
-        passedOrder.push(player.name);
-        lastPassed = player.name;
+function markPassedByIndex(index) {
+    const p = players[index];
+    if (!p || !p.name || !p.raceId) return;
+
+    if (!passedOrder.includes(p.name)) {
+        passedOrder.push(p.name);
         turn++;
 
         if (allPlayersPassed()) {
@@ -92,39 +105,30 @@ function markPassedByIndex(index) {
     }
 }
 
-/** Undo last pass (only before round finishes). */
 function undoLastPass() {
     if (passedOrder.length === 0) return;
-    const popped = passedOrder.pop();
-    lastPassed = popped || null;
-    if (turn > 1) turn--;
+    passedOrder.pop();
+    turn = Math.max(1, turn - 1);
 }
 
-/**
- * Finish the current round and generate the next round order
- * based on the order in which players passed.
- */
+/* ------------------ ROUND END ------------------ */
+
 function finishRoundAndReorder() {
     const active = getActivePlayers();
-    if (active.length === 0) return;
 
-    let newActiveOrder = passedOrder
-        .map(name => active.find(p => p.name === name))
-        .filter(Boolean);
+    // Build new order based on pass order
+    const newOrder = passedOrder.map(name =>
+        active.find(p => p.name === name)
+    );
 
-    if (newActiveOrder.length !== active.length) {
-        newActiveOrder = active;
-    }
-
-    let activeIndex = 0;
+    // Reinsert into full players array
+    let idx = 0;
     players = players.map(p => {
         if (p.name && p.raceId) {
-            return newActiveOrder[activeIndex++];
+            return newOrder[idx++];
         }
         return p;
     });
 
-    passedOrder = [];
-    lastPassed = null;
-    turn = 1;
+    resetRoundState();
 }
