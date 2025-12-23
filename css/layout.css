@@ -1,130 +1,201 @@
 /* -----------------------------------------------------------
-   LAYOUT — 10-inch Tablet Optimised, Large UI
+   Layout — 10" tablet, wide & readable
 ----------------------------------------------------------- */
 
 body {
-    margin: 0;
-    padding: 0;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .app-title {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    font-size: 2.4rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-align: center;
 }
 
 main {
-    width: 100%;
-    max-width: 1000px;
-    padding: 24px 24px 48px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
+  width: 100%;
+  max-width: 1000px;
+  padding: 24px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-/* Hide setup panel in game mode */
+/* Hide setup, show game when started */
 body.game-started #setupPanel {
-    display: none;
+  transform: translateY(-20px);
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+  border: none;
 }
 
-body.game-started main {
-    padding-top: 12px;
+body.game-started #gamePanel {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Setup Panel */
+
 #setupPanel {
-    background: rgba(10, 12, 25, 0.9);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px;
-    box-shadow: var(--shadow-deep);
+  background: rgba(10, 12, 25, 0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-deep);
+  transition: all 0.25s ease;
 }
 
 #setupHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+#setupHeader h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.setup-subtitle {
+  margin-top: 4px;
+  margin-bottom: 0;
+  color: var(--fg-soft);
+  font-size: 1rem;
+}
+
+.setup-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.player-count-label {
+  font-size: 0.9rem;
+  color: var(--fg-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#playerCountSelect {
+  padding: 6px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #050712;
+  color: var(--fg);
+  font-size: 1rem;
 }
 
 #setupBody {
-    margin-top: 16px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 #setupSummary {
-    margin-top: 12px;
-    font-size: 1.1rem;
-    color: var(--fg-soft);
+  margin-top: 12px;
+  font-size: 1.1rem;
+  color: var(--fg-soft);
 }
 
-/* Game UI */
+/* Game Panel */
+
+#gamePanel {
+  background: rgba(10, 12, 25, 0.9);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-soft);
+  padding: 20px 24px 24px;
+  box-shadow: var(--shadow-deep);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#roundHeader {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
 #turnDisplay {
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 800;
+  font-size: 2rem;
+  font-weight: 800;
 }
 
 #hintText {
-    text-align: center;
-    font-size: 1.4rem;
-    color: var(--fg-soft);
+  font-size: 1.2rem;
+  color: var(--fg-soft);
 }
 
 #orderList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+#gameActions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
 }
 
 /* Modal */
+
 .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    backdrop-filter: blur(4px);
-    display: none;
-    align-items: center;
-    justify-content: center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 .modal-backdrop.visible {
-    display: flex;
+  display: flex;
 }
 
 .modal {
-    width: min(600px, 92vw);
-    max-height: 82vh;
-    overflow-y: auto;
-
-    background: linear-gradient(160deg, #0d1124 0%, #1a1f3a 100%);
-    border-radius: var(--radius);
-    border: 1px solid rgba(120, 140, 255, 0.25);
-
-    padding: 28px;
-    box-shadow:
-        0 0 25px rgba(0, 0, 0, 0.7),
-        0 0 18px rgba(78, 201, 240, 0.25);
+  width: min(600px, 92vw);
+  max-height: 82vh;
+  overflow-y: auto;
+  background: linear-gradient(160deg, #0d1124 0%, #1a1f3a 100%);
+  border-radius: var(--radius);
+  border: 1px solid rgba(120, 140, 255, 0.25);
+  padding: 24px 24px 28px;
+  box-shadow:
+    0 0 25px rgba(0, 0, 0, 0.7),
+    0 0 18px rgba(78, 201, 240, 0.25);
 }
 
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
 }
 
 .race-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
 }

@@ -3,5 +3,6 @@
 ----------------------------------------------------------- */
 
 function attachGestureHandlers() {
-    // You can reintroduce swipe-to-pass here later if you want.
+    // For now, clicks drive everything.
+    // You can add swipe handling here later if you want.
 }

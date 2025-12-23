@@ -1,8 +1,7 @@
 /* -----------------------------------------------------------
    FIREBASE INITIALISATION + SHARED GAME STATE
-   - Hidden auto-reset on first load
+   - Hidden auto-reset on first load (Option C)
    - Shared /gameState across all devices
-   - Compatible with Eclipse-style pass system in state.js
 ----------------------------------------------------------- */
 
 const firebaseConfig = {
@@ -62,7 +61,6 @@ function applyGameStateRemote(state) {
 
     renderSetupFromState();
     renderOrderFromState();
-
     isApplyingRemoteState = false;
 }
 

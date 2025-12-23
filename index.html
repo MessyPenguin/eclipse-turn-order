@@ -1,65 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eclipse Turn Order</title>
+  <meta charset="UTF-8" />
+  <title>Eclipse Turn Order</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="theme.css" />
-    <link rel="stylesheet" href="layout.css" />
-    <link rel="stylesheet" href="components.css" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="layout.css" />
+  <link rel="stylesheet" href="components.css" />
 </head>
-
 <body>
+  <h1 class="app-title">Eclipse Turn Order</h1>
 
-    <h1 class="app-title">Eclipse Turn Order</h1>
-
-    <main>
-
-        <!-- SETUP PANEL -->
-        <section id="setupPanel">
-
-            <header id="setupHeader">
-                <h2>Setup</h2>
-                <button id="startGameBtn">Start Game</button>
-            </header>
-
-            <div id="setupBody">
-
-                <!-- PLAYER NAME INPUTS -->
-                <div id="playerList"></div>
-
-                <!-- ADD PLAYER BUTTON -->
-                <button id="addPlayerBtn" class="secondary">Add Player</button>
-
-                <!-- RACE SELECTION -->
-                <h3>Select Races</h3>
-                <div id="raceChipContainer"></div>
-
-            </div>
-
-            <div id="setupSummary"></div>
-        </section>
-
-        <!-- GAME UI -->
-        <div id="turnDisplay"></div>
-        <div id="hintText"></div>
-
-        <ul id="orderList"></ul>
-
-    </main>
-
-    <!-- RACE MODAL -->
-    <div class="modal-backdrop" id="raceModalBackdrop">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="raceModalTitle">Choose Race</h2>
-                <button id="closeRaceModalBtn" class="icon-btn">×</button>
-            </div>
-            <div class="race-grid" id="raceGrid"></div>
+  <main>
+    <!-- SETUP PANEL -->
+    <section id="setupPanel">
+      <header id="setupHeader">
+        <div>
+          <h2>Setup</h2>
+          <p class="setup-subtitle">Configure players and races, then start the game.</p>
         </div>
-    </div>
 
-    <script src="ui.js"></script>
+        <div class="setup-controls-right">
+          <label for="playerCountSelect" class="player-count-label">
+            Players
+            <select id="playerCountSelect">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4" selected>4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+            </select>
+          </label>
+
+          <button id="startGameBtn">Start Game</button>
+        </div>
+      </header>
+
+      <div id="setupBody">
+        <div id="playerList"></div>
+      </div>
+
+      <div id="setupSummary"></div>
+    </section>
+
+    <!-- GAME UI -->
+    <section id="gamePanel">
+      <div id="roundHeader">
+        <div id="turnDisplay">Round 1</div>
+        <div id="hintText">Tap a player when they pass.</div>
+      </div>
+
+      <ul id="orderList"></ul>
+
+      <div id="gameActions">
+        <button id="undoBtn" class="secondary" disabled>Undo Last Pass</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- RACE MODAL -->
+  <div class="modal-backdrop" id="raceModalBackdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="raceModalTitle">Choose Race</h2>
+        <button id="closeRaceModalBtn" class="icon-btn" type="button">×</button>
+      </div>
+      <div class="race-grid" id="raceGrid"></div>
+    </div>
+  </div>
+
+  <script src="ui.js"></script>
 </body>
 </html>
