@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------
-   LAYOUT — Guaranteed Centered Column Layout
+   LAYOUT — Wide, Readable, Table-Friendly UI
 ----------------------------------------------------------- */
 
 :root {
@@ -22,7 +22,6 @@
 
 /* -------------------- Page Layout -------------------- */
 
-/* Force body to centre everything */
 body {
     margin: 0;
     padding: 0;
@@ -31,22 +30,20 @@ body {
     font-family: system-ui, sans-serif;
 
     display: flex;
-    justify-content: center;   /* horizontal centering */
-    align-items: flex-start;   /* top aligned */
-    min-height: 100vh;         /* full height */
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
 }
 
-/* The main column */
 main {
     width: 100%;
-    max-width: 600px;          /* centre column width */
-    padding: 20px 16px 40px;
+    max-width: 760px; /* wider for table readability */
+    padding: 20px 20px 40px;
 
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
 
-    /* This guarantees centring even if parent styles interfere */
     margin-left: auto;
     margin-right: auto;
 }
@@ -57,7 +54,7 @@ main {
     background: rgba(10, 12, 25, 0.9);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 16px;
+    padding: 20px;
     box-shadow: var(--shadow-deep);
     width: 100%;
 }
@@ -77,9 +74,9 @@ main {
 }
 
 #setupSummary {
-    font-size: 0.85rem;
+    font-size: 1rem;
     color: var(--fg-soft);
-    margin-top: 6px;
+    margin-top: 8px;
 }
 
 /* -------------------- Order List -------------------- */
@@ -91,8 +88,7 @@ main {
 
     display: flex;
     flex-direction: column;
-    gap: 10px;
-
+    gap: 16px; /* more breathing room */
     width: 100%;
 }
 
@@ -100,18 +96,18 @@ main {
 
 #turnDisplay {
     text-align: center;
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-top: 4px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-top: 8px;
 }
 
 /* -------------------- Hint Text -------------------- */
 
 #hintText {
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     color: var(--fg-soft);
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 /* -------------------- Race Modal -------------------- */
@@ -132,15 +128,15 @@ main {
 }
 
 .modal {
-    width: min(480px, 92vw);
-    max-height: 80vh;
+    width: min(520px, 92vw); /* slightly wider */
+    max-height: 82vh;
     overflow-y: auto;
 
     background: linear-gradient(160deg, #0d1124 0%, #1a1f3a 100%);
     border-radius: var(--radius);
     border: 1px solid rgba(120, 140, 255, 0.25);
 
-    padding: 16px 18px 20px;
+    padding: 20px 22px 24px;
     box-shadow:
         0 0 25px rgba(0, 0, 0, 0.7),
         0 0 18px rgba(78, 201, 240, 0.25);
@@ -152,13 +148,13 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 14px;
-    padding-bottom: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 #raceModalTitle {
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -168,7 +164,7 @@ main {
 
 #closeRaceModalBtn {
     color: var(--fg);
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     opacity: 0.8;
     transition: opacity 0.15s ease;
 }
@@ -177,11 +173,82 @@ main {
     opacity: 1;
 }
 
-/* -------------------- Race Grid -------------------- */
+/* -------------------- Race Grid (Bigger Cards) -------------------- */
 
 .race-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); /* bigger */
+    gap: 16px;
     padding-bottom: 10px;
+}
+
+.race-card {
+    padding: 18px; /* bigger card */
+    border-radius: var(--radius-sm);
+
+    background: linear-gradient(145deg,
+        rgba(255,255,255,0.05),
+        rgba(0,0,0,0.4)
+    );
+    border: 1px solid rgba(255,255,255,0.08);
+
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform 0.12s ease,
+        box-shadow 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.race-card:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 0 18px rgba(78, 201, 240, 0.35);
+    border-color: var(--faction-color);
+}
+
+.race-card:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.race-card-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.race-card-glyph {
+    width: 48px;   /* bigger glyph */
+    height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+
+    background: radial-gradient(circle at top,
+        rgba(255,255,255,0.15),
+        rgba(0,0,0,0.85)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 0 8px rgba(0,0,0,0.6);
+}
+
+.race-card-name {
+    font-size: 1.2rem; /* bigger text */
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: 0.03em;
+    text-shadow: 0 0 6px rgba(0,0,0,0.6);
+}
+
+.race-card-meta {
+    font-size: 1rem;
+    color: var(--fg-soft);
+    opacity: 0.9;
 }
