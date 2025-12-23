@@ -162,12 +162,15 @@
 
 .modal {
     width: min(480px, 92vw);
+    max-height: 80vh;        /* NEW */
+    overflow-y: auto;        /* NEW */
     background: linear-gradient(145deg, #050712, #171b33);
     border-radius: var(--radius);
     border: 1px solid var(--border-soft);
     padding: 12px;
     box-shadow: var(--shadow-deep);
 }
+
 
 .modal-header {
     display: flex;
@@ -182,12 +185,13 @@
     letter-spacing: 0.16em;
     color: var(--muted);
 }
-
 .race-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* UPDATED */
+    gap: 10px;
+    padding-bottom: 10px; /* prevents last row clipping */
 }
+
 
 @media (min-width: 768px) {
     #app {
@@ -202,3 +206,4 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
+
