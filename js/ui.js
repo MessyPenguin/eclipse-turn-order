@@ -1,9 +1,5 @@
 /* -----------------------------------------------------------
-   UI RENDERING + DOM BINDING
-   - Setup panel
-   - Race modal
-   - Order list
-   - Uses Eclipse-style pass system from state.js
+   UI RENDERING + DOM BINDING (LOCAL ONLY)
 ----------------------------------------------------------- */
 
 let playerCountSelect;
@@ -90,7 +86,6 @@ function bindUiEvents() {
         toggleSetupIconEl.textContent = isCollapsed ? "▸" : "▾";
     });
 
-    // Modal close controls
     closeRaceModalBtnEl.addEventListener("click", closeRaceModal);
     raceModalBackdropEl.addEventListener("click", (e) => {
         if (e.target === raceModalBackdropEl || e.target.dataset.closeModal === "race") {
@@ -105,7 +100,6 @@ function bindUiEvents() {
     });
 }
 
-/** Quick-setup: generic names + sequential races. */
 function quickSetup() {
     const count = parseInt(playerCountSelect.value, 10) || 4;
     setPlayerCount(count);
@@ -117,10 +111,9 @@ function quickSetup() {
     }
 }
 
-/** Render setup rows from players state. */
 function renderSetupFromState() {
     const count = parseInt(playerCountSelect.value, 10) || 4;
-    setPlayerCount(count); // ensure players length matches count
+    setPlayerCount(count);
 
     playerRowsContainer.innerHTML = "";
 
@@ -175,7 +168,6 @@ function renderSetupFromState() {
     updateSetupSummary();
 }
 
-/** Update hint summary under "Setup". */
 function updateSetupSummary() {
     const active = players.filter(p => p.name && p.raceId);
     const count = active.length;
@@ -188,12 +180,10 @@ function updateSetupSummary() {
     }
 }
 
-/** Turn display text. */
 function updateTurnDisplay() {
     turnDisplayEl.textContent = `Turn: ${turn}`;
 }
 
-/** Render order list from players + passedOrder. */
 function renderOrderFromState() {
     orderListEl.innerHTML = "";
 
@@ -225,13 +215,11 @@ function renderOrderFromState() {
             const wasCompleteBefore = allPlayersPassed();
             markPassedByIndex(p.index);
 
-            // After mark, we might have finished the round and reordered
             renderOrderFromState();
             updateTurnDisplay();
             updateUndoVisibility();
 
             if (allPlayersPassed() && !wasCompleteBefore) {
-                // We just transitioned to "everyone passed"
                 hintTextEl.textContent = "Round complete. New order generated.";
                 playBeep("shuffle");
             } else if (!allPlayersPassed()) {
@@ -247,19 +235,16 @@ function renderOrderFromState() {
     updateUndoVisibility();
 }
 
-/** Undo button visibility. */
 function updateUndoVisibility() {
     undoBtnEl.style.display = passedOrder.length > 0 ? "inline-flex" : "none";
 }
 
-/** Collapses the setup panel. */
 function collapseSetupPanel() {
     setupBodyEl.classList.add("collapsed");
     toggleSetupBtnEl.setAttribute("aria-expanded", "false");
     toggleSetupIconEl.textContent = "▸";
 }
 
-/** Expands the setup panel. */
 function expandSetupPanel() {
     setupBodyEl.classList.remove("collapsed");
     toggleSetupBtnEl.setAttribute("aria-expanded", "true");
@@ -279,7 +264,6 @@ function closeRaceModal() {
     raceModalCurrentIndex = null;
 }
 
-/** Populate race selection grid. */
 function populateRaceGrid() {
     raceGridEl.innerHTML = "";
     RACES.forEach(race => {
