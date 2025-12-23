@@ -208,8 +208,69 @@ body.game-started #gamePanel {
   margin-bottom: 18px;
 }
 
+/* -----------------------------------------------------------
+   RACE MODAL — POLISHED, FACTION-COLOURED GLOW
+----------------------------------------------------------- */
+
 .race-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+  gap: 20px;
+  padding: 10px 0;
 }
+
+.race-option {
+  background: rgba(12, 14, 28, 0.85);
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.race-option:hover,
+.race-option:active {
+  transform: scale(1.04);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
+}
+
+.race-option img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.15));
+}
+
+.race-option-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+/* -----------------------------------------------------------
+   FACTION COLOUR GLOWS
+   (Matches Eclipse faction themes)
+----------------------------------------------------------- */
+
+.race-option.terran      { border-color: #4da3ff; box-shadow: 0 0 12px #4da3ff55; }
+.race-option.planta      { border-color: #4cff4c; box-shadow: 0 0 12px #4cff4c55; }
+.race-option.hydran      { border-color: #9d7bff; box-shadow: 0 0 12px #9d7bff55; }
+.race-option.orion       { border-color: #ff4d4d; box-shadow: 0 0 12px #ff4d4d55; }
+.race-option.mechanema   { border-color: #ffd24d; box-shadow: 0 0 12px #ffd24d55; }
+.race-option.exiles      { border-color: #00e0ff; box-shadow: 0 0 12px #00e0ff55; }
+.race-option.magellan    { border-color: #ff7b00; box-shadow: 0 0 12px #ff7b0055; }
+.race-option.rhoindi     { border-color: #ff66cc; box-shadow: 0 0 12px #ff66cc55; }
+.race-option.enclave     { border-color: #b3b3b3; box-shadow: 0 0 12px #b3b3b355; }
+.race-option.wardens     { border-color: #66ffcc; box-shadow: 0 0 12px #66ffcc55; }
+
+/* Expansion factions */
+.race-option.shapers     { border-color: #ff66ff; box-shadow: 0 0 12px #ff66ff55; }
+.race-option.lyra        { border-color: #66aaff; box-shadow: 0 0 12px #66aaff55; }
+.race-option.keepers     { border-color: #ffaa00; box-shadow: 0 0 12px #ffaa0055; }
+.race-option.architects  { border-color: #00ffaa; box-shadow: 0 0 12px #00ffaa55; }
+.race-option.riftborn    { border-color: #aa66ff; box-shadow: 0 0 12px #aa66ff55; }
+
+
