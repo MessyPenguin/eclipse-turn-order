@@ -1,8 +1,14 @@
 /* -----------------------------------------------------------
-   Layout — 10" tablet, wide & readable
+   Layout — FIXED VERSION (stable, dark mode, tablet-friendly)
 ----------------------------------------------------------- */
 
 body {
+  margin: 0;
+  padding: 0;
+  background: #050712;
+  color: var(--fg);
+  font-family: system-ui, sans-serif;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,6 +23,7 @@ body {
   text-align: center;
 }
 
+/* Main container */
 main {
   width: 100%;
   max-width: 1000px;
@@ -26,33 +33,19 @@ main {
   gap: 24px;
 }
 
-/* Hide setup, show game when started */
-body.game-started #setupPanel {
-  transform: translateY(-20px);
-  opacity: 0;
-  pointer-events: none;
-  height: 0;
-  margin: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  overflow: hidden;
-  border: none;
-}
-
-body.game-started #gamePanel {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Setup Panel */
+/* -----------------------------------------------------------
+   SETUP PANEL — FIXED (no collapsing, no blocking input)
+----------------------------------------------------------- */
 
 #setupPanel {
-  background: rgba(10, 12, 25, 0.9);
+  background: rgba(10, 12, 25, 0.95);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
   box-shadow: var(--shadow-deep);
-  transition: all 0.25s ease;
+
+  /* Smooth slide-away animation */
+  transition: transform 0.35s ease, opacity 0.35s ease, height 0.35s ease;
 }
 
 #setupHeader {
@@ -62,14 +55,8 @@ body.game-started #gamePanel {
   gap: 16px;
 }
 
-#setupHeader h2 {
-  margin: 0;
-  font-size: 1.6rem;
-}
-
 .setup-subtitle {
-  margin-top: 4px;
-  margin-bottom: 0;
+  margin: 4px 0 0 0;
   color: var(--fg-soft);
   font-size: 1rem;
 }
@@ -110,18 +97,46 @@ body.game-started #gamePanel {
   color: var(--fg-soft);
 }
 
-/* Game Panel */
+/* -----------------------------------------------------------
+   GAME PANEL — FIXED (hidden until game-started)
+----------------------------------------------------------- */
 
 #gamePanel {
-  background: rgba(10, 12, 25, 0.9);
+  background: rgba(10, 12, 25, 0.95);
   border-radius: var(--radius);
   border: 1px solid var(--border-soft);
   padding: 20px 24px 24px;
   box-shadow: var(--shadow-deep);
+
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateY(20px);
+  pointer-events: none;
+
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
+
+/* When game starts */
+body.game-started #setupPanel {
+  opacity: 0;
+  transform: translateY(-40px);
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border: none;
+}
+
+body.game-started #gamePanel {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* -----------------------------------------------------------
+   GAME UI CONTENT
+----------------------------------------------------------- */
 
 #roundHeader {
   text-align: center;
@@ -153,7 +168,9 @@ body.game-started #gamePanel {
   justify-content: center;
 }
 
-/* Modal */
+/* -----------------------------------------------------------
+   MODAL — FIXED (no blocking input)
+----------------------------------------------------------- */
 
 .modal-backdrop {
   position: fixed;
@@ -173,9 +190,11 @@ body.game-started #gamePanel {
   width: min(600px, 92vw);
   max-height: 82vh;
   overflow-y: auto;
+
   background: linear-gradient(160deg, #0d1124 0%, #1a1f3a 100%);
   border-radius: var(--radius);
   border: 1px solid rgba(120, 140, 255, 0.25);
+
   padding: 24px 24px 28px;
   box-shadow:
     0 0 25px rgba(0, 0, 0, 0.7),
@@ -187,11 +206,6 @@ body.game-started #gamePanel {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 18px;
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.4rem;
 }
 
 .race-grid {
