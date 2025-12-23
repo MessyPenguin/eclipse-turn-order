@@ -1,5 +1,9 @@
 /* -----------------------------------------------------------
    UI RENDERING + DOM BINDING
+   - Setup panel
+   - Race modal
+   - Order list
+   - Uses Eclipse-style pass system from state.js
 ----------------------------------------------------------- */
 
 let playerCountSelect;
@@ -72,9 +76,11 @@ function bindUiEvents() {
         undoLastPass();
         renderOrderFromState();
         updateUndoVisibility();
+
         hintTextEl.textContent = allPlayersPassed()
-            ? "Round complete."
+            ? "Round complete. New order generated."
             : "Tap a player when they have taken their turn.";
+
         playBeep("tap");
     });
 
@@ -142,7 +148,12 @@ function renderSetupFromState() {
         raceBtn.className = `race-chip ${colorClass}`;
 
         const glyphHtml = glyphPath
-            ? `<div class="race-chip-glyph"><img src="${glyphPath}" alt=""></div>`
+            ? `
+                <div class="race-chip-glyph">
+                    <img src="${glyphPath}" alt=""
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'race-chip-dot\'></span>';">
+                </div>
+              `
             : `<span class="race-chip-dot"></span>`;
 
         raceBtn.innerHTML = `
@@ -166,8 +177,8 @@ function renderSetupFromState() {
 
 /** Update hint summary under "Setup". */
 function updateSetupSummary() {
-    const filled = players.filter(p => p.name && p.raceId);
-    const count = filled.length;
+    const active = players.filter(p => p.name && p.raceId);
+    const count = active.length;
     if (count === 0) {
         setupSummaryEl.textContent = "No players yet";
     } else if (count === 1) {
@@ -211,14 +222,20 @@ function renderOrderFromState() {
         `;
 
         li.addEventListener("click", () => {
-            if (!passedOrder.includes(p.name)) {
-                markPassedByIndex(p.index);
-                renderOrderFromState();
-                updateTurnDisplay();
-                updateUndoVisibility();
-                hintTextEl.textContent = allPlayersPassed()
-                    ? "Round complete."
-                    : "Tap a player when they have taken their turn.";
+            const wasCompleteBefore = allPlayersPassed();
+            markPassedByIndex(p.index);
+
+            // After mark, we might have finished the round and reordered
+            renderOrderFromState();
+            updateTurnDisplay();
+            updateUndoVisibility();
+
+            if (allPlayersPassed() && !wasCompleteBefore) {
+                // We just transitioned to "everyone passed"
+                hintTextEl.textContent = "Round complete. New order generated.";
+                playBeep("shuffle");
+            } else if (!allPlayersPassed()) {
+                hintTextEl.textContent = "Tap a player when they have taken their turn.";
                 playBeep("tap");
             }
         });
@@ -273,7 +290,8 @@ function populateRaceGrid() {
         card.innerHTML = `
             <div class="race-card-main">
                 <div class="race-card-glyph">
-                    <img src="${race.glyph}" alt="${race.name} glyph">
+                    <img src="${race.glyph}" alt="${race.name} glyph"
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'race-chip-dot\'></span>';">
                 </div>
                 <div>
                     <div class="race-card-name">${race.name}</div>
