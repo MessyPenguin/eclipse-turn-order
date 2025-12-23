@@ -188,6 +188,7 @@ function renderRaceModal() {
 
 function openRaceModal(playerIndex) {
   raceSelectPlayerIndex = playerIndex;
+  renderRaceModal();
   raceGridEl.innerHTML = "";
 
   RACES.forEach(r => {
@@ -430,5 +431,6 @@ function formatOrdinal(n) {
 function cryptoRandomId() {
   return Math.random().toString(36).slice(2, 10);
 }
+
 
 
