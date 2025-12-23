@@ -18,30 +18,40 @@
             <p id="hintText">Add players and races, then start the round.</p>
         </header>
 
-        <section id="setupPanel" class="panel">
-            <div class="panel-header">
-                <h2>Setup</h2>
+        <!-- Collapsible setup panel -->
+        <section id="setupPanel" class="panel panel-collapsible">
+            <div class="panel-header setup-header">
+                <div class="setup-header-main">
+                    <h2>Setup</h2>
+                    <span id="setupSummary" class="setup-summary">No players yet</span>
+                </div>
+                <button id="toggleSetupBtn" class="icon-btn" aria-expanded="true">
+                    <span id="toggleSetupIcon">▾</span>
+                </button>
             </div>
 
-            <div class="setup-controls">
-                <label for="playerCount">Players:</label>
-                <select id="playerCount">
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4" selected>4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                </select>
-                <button id="quickSetupBtn">Quick setup</button>
-            </div>
+            <div id="setupBody" class="setup-body">
+                <div class="setup-controls">
+                    <label for="playerCount">Players</label>
+                    <select id="playerCount">
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4" selected>4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                    <button id="quickSetupBtn" class="secondary">Quick setup</button>
+                </div>
 
-            <div id="playerRows"></div>
+                <div id="playerRows"></div>
 
-            <div class="setup-actions">
-                <button id="startRoundBtn">Start round</button>
+                <div class="setup-actions">
+                    <button id="startRoundBtn">Start round</button>
+                </div>
             </div>
         </section>
 
+        <!-- Turn order panel -->
         <section id="orderPanel" class="panel">
             <div class="panel-header">
                 <h2>Turn order</h2>
@@ -54,6 +64,19 @@
                 <button id="undoBtn" class="secondary" style="display:none;">Undo last pass</button>
             </div>
         </section>
+    </div>
+
+    <!-- Race selection modal -->
+    <div id="raceModalBackdrop" class="modal-backdrop" data-close-modal="race">
+        <div id="raceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="raceModalTitle">
+            <div class="modal-header">
+                <h2 id="raceModalTitle">Select race</h2>
+                <button id="closeRaceModalBtn" class="icon-btn" aria-label="Close race selection">✕</button>
+            </div>
+            <div id="raceGrid" class="race-grid">
+                <!-- populated by JS -->
+            </div>
+        </div>
     </div>
 
     <!-- Firebase SDK -->
