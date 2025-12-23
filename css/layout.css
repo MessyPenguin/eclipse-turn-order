@@ -2,63 +2,50 @@
    LAYOUT — 10-inch Tablet Optimised, Large UI
 ----------------------------------------------------------- */
 
-:root {
-    --fg: #e8ecff;
-    --fg-soft: #b8c0e0;
-    --muted: #6c7390;
-
-    --accent: #4ec9f0;
-    --success: #7fffb0;
-
-    --border: rgba(255,255,255,0.12);
-    --border-soft: rgba(255,255,255,0.06);
-
-    --radius: 14px;
-    --radius-sm: 10px;
-
-    --shadow-deep: 0 0 30px rgba(0,0,0,0.6);
-    --glow-soft: 0 0 12px rgba(78, 201, 240, 0.4);
-
-    font-size: 20px; /* GLOBAL SCALE UP */
-}
-
-/* -------------------- Page Layout -------------------- */
-
 body {
     margin: 0;
     padding: 0;
-    background: #050712;
-    color: var(--fg);
-    font-family: system-ui, sans-serif;
 
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+}
+
+.app-title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-align: center;
 }
 
 main {
     width: 100%;
-    max-width: 1000px; /* WIDE for 10-inch tablet */
+    max-width: 1000px;
     padding: 24px 24px 48px;
 
     display: flex;
     flex-direction: column;
     gap: 28px;
-
-    margin-left: auto;
-    margin-right: auto;
 }
 
-/* -------------------- Setup Panel -------------------- */
+/* Hide setup panel in game mode */
+body.game-started #setupPanel {
+    display: none;
+}
 
+body.game-started main {
+    padding-top: 12px;
+}
+
+/* Setup Panel */
 #setupPanel {
     background: rgba(10, 12, 25, 0.9);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 24px;
     box-shadow: var(--shadow-deep);
-    width: 100%;
 }
 
 #setupHeader {
@@ -71,49 +58,35 @@ main {
     margin-top: 16px;
 }
 
-#setupBody.collapsed {
-    display: none;
-}
-
 #setupSummary {
+    margin-top: 12px;
     font-size: 1.1rem;
     color: var(--fg-soft);
-    margin-top: 10px;
 }
 
-/* -------------------- Order List -------------------- */
-
-#orderList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    display: flex;
-    flex-direction: column;
-    gap: 22px; /* more breathing room */
-    width: 100%;
-}
-
-/* -------------------- Turn Display -------------------- */
-
+/* Game UI */
 #turnDisplay {
     text-align: center;
     font-size: 2rem;
     font-weight: 800;
-    margin-top: 12px;
 }
-
-/* -------------------- Hint Text -------------------- */
 
 #hintText {
     text-align: center;
     font-size: 1.4rem;
     color: var(--fg-soft);
-    margin-bottom: 12px;
 }
 
-/* -------------------- Race Modal -------------------- */
+#orderList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
 
+/* Modal */
 .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -122,7 +95,6 @@ main {
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
 }
 
 .modal-backdrop.visible {
@@ -138,92 +110,21 @@ main {
     border-radius: var(--radius);
     border: 1px solid rgba(120, 140, 255, 0.25);
 
-    padding: 28px 28px 32px;
+    padding: 28px;
     box-shadow:
         0 0 25px rgba(0, 0, 0, 0.7),
         0 0 18px rgba(78, 201, 240, 0.25);
-
-    backdrop-filter: blur(6px);
 }
 
 .modal-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-
-#raceModalTitle {
-    font-size: 1.6rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--fg);
-}
-
-#closeRaceModalBtn {
-    color: var(--fg);
-    font-size: 1.6rem;
-    opacity: 0.8;
-}
-
-/* -------------------- Race Grid (Bigger Cards) -------------------- */
 
 .race-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
-    padding-bottom: 10px;
-}
-
-.race-card {
-    padding: 24px;
-    border-radius: var(--radius-sm);
-
-    background: linear-gradient(145deg,
-        rgba(255,255,255,0.05),
-        rgba(0,0,0,0.4)
-    );
-    border: 1px solid rgba(255,255,255,0.08);
-
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    position: relative;
-    overflow: hidden;
-
-    transition:
-        transform 0.12s ease,
-        box-shadow 0.15s ease,
-        border-color 0.15s ease;
-}
-
-.race-card:hover:not(:disabled) {
-    transform: translateY(-4px);
-    box-shadow: 0 0 22px rgba(78, 201, 240, 0.35);
-    border-color: var(--faction-color);
-}
-
-.race-card-glyph {
-    width: 64px;
-    height: 64px;
-    border-radius: 10px;
-    overflow: hidden;
-
-    background: radial-gradient(circle at top,
-        rgba(255,255,255,0.15),
-        rgba(0,0,0,0.85)
-    );
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.race-card-name {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--fg);
 }
