@@ -1,20 +1,25 @@
-.faction-terran   { --faction-color: #4ec9f0; }
-.faction-eridani  { --faction-color: #ffb347; }
-.faction-hydran   { --faction-color: #a77bff; }
-.faction-planta   { --faction-color: #7fff7f; }
-.faction-orion    { --faction-color: #ff6666; }
-.faction-mechanema{ --faction-color: #c0c0ff; }
-.faction-exiles   { --faction-color: #ffd966; }
-.faction-rhoindi  { --faction-color: #66ffd1; }
+:root {
+    --fg: #e8ecff;
+    --fg-soft: #b8c0e0;
+    --muted: #6c7390;
 
-.faction-magellan { --faction-color: #66aaff; }
-.faction-wardens  { --faction-color: #ffaaee; }
-.faction-enclave  { --faction-color: #ffdd88; }
-.faction-shapers  { --faction-color: #88ffcc; }
+    --accent: #4ec9f0;
+    --success: #7fffb0;
 
+    --border: rgba(255,255,255,0.12);
+    --border-soft: rgba(255,255,255,0.06);
 
-/* Glow utility */
-.glow-soft {
-    box-shadow: var(--glow-soft);
+    --radius: 14px;
+    --radius-sm: 10px;
+
+    --shadow-deep: 0 0 30px rgba(0,0,0,0.6);
+    --glow-soft: 0 0 12px rgba(78, 201, 240, 0.4);
+
+    font-size: 20px; /* GLOBAL SCALE UP */
 }
 
+body {
+    background: #050712;
+    color: var(--fg);
+    font-family: system-ui, sans-serif;
+}
