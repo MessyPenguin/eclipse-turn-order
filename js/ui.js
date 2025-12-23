@@ -100,16 +100,23 @@ function bindUiEvents() {
     });
 }
 
+/* --------------------- QUICK SETUP ------------------------ */
+
 function quickSetup() {
     const count = parseInt(playerCountSelect.value, 10) || 4;
     setPlayerCount(count);
+    usedRaces.clear();
+
     for (let i = 0; i < count; i++) {
         const name = `Player ${i + 1}`;
         const raceId = RACES[i % RACES.length].id;
+
         setPlayerName(i, name);
         setPlayerRace(i, raceId);
     }
 }
+
+/* --------------------- SETUP PANEL ------------------------ */
 
 function renderSetupFromState() {
     const count = parseInt(playerCountSelect.value, 10) || 4;
@@ -171,14 +178,13 @@ function renderSetupFromState() {
 function updateSetupSummary() {
     const active = players.filter(p => p.name && p.raceId);
     const count = active.length;
-    if (count === 0) {
-        setupSummaryEl.textContent = "No players yet";
-    } else if (count === 1) {
-        setupSummaryEl.textContent = "1 player configured";
-    } else {
-        setupSummaryEl.textContent = `${count} players configured`;
-    }
+    setupSummaryEl.textContent =
+        count === 0 ? "No players yet" :
+        count === 1 ? "1 player configured" :
+        `${count} players configured`;
 }
+
+/* --------------------- ORDER LIST ------------------------ */
 
 function updateTurnDisplay() {
     turnDisplayEl.textContent = `Turn: ${turn}`;
@@ -197,18 +203,21 @@ function renderOrderFromState() {
         const colorClass = race ? race.colorClass : "faction-generic";
         li.className = `order-item ${colorClass}`;
 
-        if (passedOrder.includes(p.name)) {
-            li.classList.add("passed");
-        }
+        const passIndex = passedOrder.indexOf(p.name);
+        const hasPassed = passIndex !== -1;
+
+        const passLabel = hasPassed
+            ? `Passed ${ordinal(passIndex + 1)}`
+            : "Tap when done";
+
+        if (hasPassed) li.classList.add("passed");
 
         li.innerHTML = `
             <div class="order-item-main">
                 <span class="order-name">${p.name}</span>
                 <span class="order-race">${race ? race.name : ""}</span>
             </div>
-            <span class="order-status">${
-                passedOrder.includes(p.name) ? "Passed" : "Tap when done"
-            }</span>
+            <span class="order-status">${passLabel}</span>
         `;
 
         li.addEventListener("click", () => {
@@ -235,9 +244,18 @@ function renderOrderFromState() {
     updateUndoVisibility();
 }
 
+function ordinal(n) {
+    if (n === 1) return "1st";
+    if (n === 2) return "2nd";
+    if (n === 3) return "3rd";
+    return `${n}th`;
+}
+
 function updateUndoVisibility() {
     undoBtnEl.style.display = passedOrder.length > 0 ? "inline-flex" : "none";
 }
+
+/* --------------------- SETUP PANEL COLLAPSE ------------------------ */
 
 function collapseSetupPanel() {
     setupBodyEl.classList.add("collapsed");
@@ -251,7 +269,7 @@ function expandSetupPanel() {
     toggleSetupIconEl.textContent = "▾";
 }
 
-/* --------------------- Race Modal ------------------------ */
+/* --------------------- RACE MODAL ------------------------ */
 
 function openRaceModalForPlayer(playerIndex) {
     raceModalCurrentIndex = playerIndex;
@@ -266,10 +284,15 @@ function closeRaceModal() {
 
 function populateRaceGrid() {
     raceGridEl.innerHTML = "";
+
     RACES.forEach(race => {
+        const taken = !isRaceAvailable(race.id);
         const card = document.createElement("button");
         card.type = "button";
         card.className = `race-card ${race.colorClass}`;
+        card.disabled = taken;
+
+        const status = taken ? `<div class="race-card-meta">Taken</div>` : "";
 
         card.innerHTML = `
             <div class="race-card-main">
@@ -279,20 +302,22 @@ function populateRaceGrid() {
                 </div>
                 <div>
                     <div class="race-card-name">${race.name}</div>
-                    <div class="race-card-meta">${race.description}</div>
+                    ${status}
                 </div>
             </div>
         `;
 
-        card.addEventListener("click", () => {
-            if (raceModalCurrentIndex != null) {
-                setPlayerRace(raceModalCurrentIndex, race.id);
-                renderSetupFromState();
-                renderOrderFromState();
-                playBeep("tap");
-            }
-            closeRaceModal();
-        });
+        if (!taken) {
+            card.addEventListener("click", () => {
+                if (raceModalCurrentIndex != null) {
+                    setPlayerRace(raceModalCurrentIndex, race.id);
+                    renderSetupFromState();
+                    renderOrderFromState();
+                    playBeep("tap");
+                }
+                closeRaceModal();
+            });
+        }
 
         raceGridEl.appendChild(card);
     });
