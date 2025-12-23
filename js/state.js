@@ -23,7 +23,7 @@ function setPlayerCount(count) {
     if (typeof syncToFirebase === "function") syncToFirebase();
 }
 
-/** Update a player's name, creating player object if needed. */
+/** Update a player's name. */
 function setPlayerName(index, name) {
     if (!players[index]) {
         players[index] = { name: "", raceId: null };
@@ -41,7 +41,7 @@ function setPlayerRace(index, raceId) {
     if (typeof syncToFirebase === "function") syncToFirebase();
 }
 
-/** Randomise player order for a new round, but keep names + races. */
+/** Randomise player order for a new round, keeping only filled players. */
 function randomisePlayerOrder() {
     const filled = players.filter(p => p.name.trim() !== "" && p.raceId);
     for (let i = filled.length - 1; i > 0; i--) {
