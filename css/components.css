@@ -181,10 +181,15 @@ button.secondary:hover {
         border-color 0.15s ease;
 }
 
-.race-card:hover {
+.race-card:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 0 14px rgba(78, 201, 240, 0.35);
     border-color: var(--faction-color);
+}
+
+.race-card:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .race-card::before {
