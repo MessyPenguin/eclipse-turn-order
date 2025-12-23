@@ -163,6 +163,28 @@ function updateSetupSummary() {
 }
 
 // ---- Race modal ----
+function renderRaceModal() {
+  raceGridEl.innerHTML = "";
+
+  RACES.forEach(r => {
+    const div = document.createElement("div");
+    div.className = `race-option ${r.id}`;
+    div.innerHTML = `
+      <img src="${r.glyph}" alt="${r.name}" />
+      <div class="race-option-name">${r.name}</div>
+    `;
+    div.onclick = () => {
+      const p = players[raceSelectPlayerIndex];
+      p.raceId = r.id;
+      p.raceName = r.name;
+      p.glyph = r.glyph || "";
+      closeRaceModal();
+      renderSetupPlayers();
+      updateSetupSummary();
+    };
+    raceGridEl.appendChild(div);
+  });
+}
 
 function openRaceModal(playerIndex) {
   raceSelectPlayerIndex = playerIndex;
@@ -408,4 +430,5 @@ function formatOrdinal(n) {
 function cryptoRandomId() {
   return Math.random().toString(36).slice(2, 10);
 }
+
 
