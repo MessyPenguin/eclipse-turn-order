@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------
-   Layout — FIXED VERSION (stable, dark mode, tablet-friendly)
+   GLOBAL LAYOUT — DARK MODE, TABLET-FRIENDLY
 ----------------------------------------------------------- */
 
 body {
@@ -8,7 +8,6 @@ body {
   background: #050712;
   color: var(--fg);
   font-family: system-ui, sans-serif;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,7 +22,6 @@ body {
   text-align: center;
 }
 
-/* Main container */
 main {
   width: 100%;
   max-width: 1000px;
@@ -34,7 +32,7 @@ main {
 }
 
 /* -----------------------------------------------------------
-   SETUP PANEL — FIXED (visible, stable, no collapsing)
+   SETUP PANEL
 ----------------------------------------------------------- */
 
 #setupPanel {
@@ -43,8 +41,6 @@ main {
   border-radius: var(--radius);
   padding: 24px;
   box-shadow: var(--shadow-deep);
-
-  /* Smooth slide-away animation */
   transition: transform 0.35s ease, opacity 0.35s ease, height 0.35s ease;
 }
 
@@ -98,7 +94,56 @@ main {
 }
 
 /* -----------------------------------------------------------
-   GAME PANEL — FIXED (hidden until game-started)
+   PLAYER ROWS (SETUP)
+----------------------------------------------------------- */
+
+.player-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 18, 32, 0.85);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 1.2rem;
+  transition: background 0.25s ease, transform 0.15s ease;
+  min-height: 64px;
+}
+
+.player-row:active {
+  transform: scale(0.98);
+}
+
+.player-row input {
+  flex: 1;
+  margin-right: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-soft);
+  background: #0a0d18;
+  color: var(--fg);
+  font-size: 1rem;
+}
+
+.player-race-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-race-glyph img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.player-race-name {
+  font-size: 1rem;
+  color: var(--fg-soft);
+}
+
+/* -----------------------------------------------------------
+   GAME PANEL
 ----------------------------------------------------------- */
 
 #gamePanel {
@@ -107,15 +152,12 @@ main {
   border: 1px solid var(--border-soft);
   padding: 20px 24px 24px;
   box-shadow: var(--shadow-deep);
-
   opacity: 0;
   transform: translateY(20px);
   pointer-events: none;
-
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-/* When game starts */
 body.game-started #setupPanel {
   opacity: 0;
   transform: translateY(-40px);
@@ -135,41 +177,103 @@ body.game-started #gamePanel {
 }
 
 /* -----------------------------------------------------------
-   GAME UI CONTENT
+   ORDER LIST (GAME PANEL)
 ----------------------------------------------------------- */
 
-#roundHeader {
-  text-align: center;
-  margin-bottom: 16px;
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 18, 32, 0.85);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  transition: background 0.25s ease, transform 0.15s ease;
+  min-height: 64px;
+  cursor: pointer;
 }
 
-#turnDisplay {
-  font-size: 2rem;
-  font-weight: 800;
+.order-item:active {
+  transform: scale(0.98);
 }
 
-#hintText {
+.order-item.passed {
+  opacity: 0.45;
+  background: rgba(10, 12, 20, 0.6);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.order-item.passed::after {
+  content: "Passed";
+  font-size: 0.9rem;
+  color: var(--fg-soft);
+  margin-left: 12px;
+}
+
+.order-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.order-glyph img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.order-name {
   font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.order-race {
+  font-size: 0.95rem;
   color: var(--fg-soft);
 }
 
-#orderList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-#gameActions {
-  margin-top: 16px;
-  display: flex;
-  justify-content: center;
+.order-status {
+  font-size: 1rem;
+  color: var(--fg-soft);
 }
 
 /* -----------------------------------------------------------
-   MODAL — FIXED (no blocking input)
+   PASS BUTTON
+----------------------------------------------------------- */
+
+.pass-btn {
+  background: #1a1f33;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  min-width: 90px;
+  text-align: center;
+}
+
+.pass-btn:hover {
+  background: #232a44;
+}
+
+.pass-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 10px rgba(120, 140, 255, 0.3);
+}
+
+.order-item.passed .pass-btn {
+  background: rgba(40, 40, 40, 0.4);
+  border-color: rgba(255, 255, 255, 0.05);
+  color: var(--fg-soft);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* -----------------------------------------------------------
+   MODAL BACKDROP
 ----------------------------------------------------------- */
 
 .modal-backdrop {
@@ -186,31 +290,22 @@ body.game-started #gamePanel {
   display: flex;
 }
 
+/* -----------------------------------------------------------
+   RACE MODAL — POLISHED
+----------------------------------------------------------- */
+
 .modal {
   width: min(600px, 92vw);
   max-height: 82vh;
   overflow-y: auto;
-
   background: linear-gradient(160deg, #0d1124 0%, #1a1f3a 100%);
   border-radius: var(--radius);
   border: 1px solid rgba(120, 140, 255, 0.25);
-
   padding: 24px 24px 28px;
   box-shadow:
     0 0 25px rgba(0, 0, 0, 0.7),
     0 0 18px rgba(78, 201, 240, 0.25);
 }
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-/* -----------------------------------------------------------
-   RACE MODAL — POLISHED, FACTION-COLOURED GLOW
------------------------------------------------------------ */
 
 .race-grid {
   display: grid;
@@ -252,11 +347,10 @@ body.game-started #gamePanel {
 
 /* -----------------------------------------------------------
    FACTION COLOUR GLOWS
-   (Matches Eclipse faction themes)
 ----------------------------------------------------------- */
 
 .race-option.terran      { border-color: #4da3ff; box-shadow: 0 0 12px #4da3ff55; }
-.race-option.planta      { border-color: #4cff4c; box-shadow: 0 0 12px #4cff4c55; }
+.race-option.planta      { border-color: #4cff4c; box-shadow: 0 0 12px #44ff4c55; }
 .race-option.hydran      { border-color: #9d7bff; box-shadow: 0 0 12px #9d7bff55; }
 .race-option.orion       { border-color: #ff4d4d; box-shadow: 0 0 12px #ff4d4d55; }
 .race-option.mechanema   { border-color: #ffd24d; box-shadow: 0 0 12px #ffd24d55; }
@@ -266,11 +360,8 @@ body.game-started #gamePanel {
 .race-option.enclave     { border-color: #b3b3b3; box-shadow: 0 0 12px #b3b3b355; }
 .race-option.wardens     { border-color: #66ffcc; box-shadow: 0 0 12px #66ffcc55; }
 
-/* Expansion factions */
 .race-option.shapers     { border-color: #ff66ff; box-shadow: 0 0 12px #ff66ff55; }
 .race-option.lyra        { border-color: #66aaff; box-shadow: 0 0 12px #66aaff55; }
 .race-option.keepers     { border-color: #ffaa00; box-shadow: 0 0 12px #ffaa0055; }
 .race-option.architects  { border-color: #00ffaa; box-shadow: 0 0 12px #00ffaa55; }
 .race-option.riftborn    { border-color: #aa66ff; box-shadow: 0 0 12px #aa66ff55; }
-
-
