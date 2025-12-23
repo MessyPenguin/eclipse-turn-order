@@ -1,22 +1,21 @@
 /* -----------------------------------------------------------
-   COMPONENTS — Buttons, Player Rows, Race Chips, Modal Cards,
-   Order List Items, and Interaction Styling
+   COMPONENTS — Large, Readable, Tablet-Friendly UI Elements
 ----------------------------------------------------------- */
 
 /* -------------------- Buttons -------------------- */
 
 button {
-    padding: 8px 14px;
+    padding: 14px 22px;
     border-radius: 999px;
     border: 1px solid transparent;
     background: var(--accent);
     color: #020308;
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 1.2rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
     transition:
         background 0.15s ease,
         transform 0.08s ease,
@@ -42,7 +41,7 @@ button.secondary {
 }
 
 button.secondary:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.06);
     color: var(--fg);
 }
 
@@ -50,8 +49,8 @@ button.secondary:hover {
 
 .icon-btn {
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
+    width: 42px;
+    height: 42px;
     border: 1px solid var(--border);
     background: rgba(0, 0, 0, 0.6);
     color: var(--fg-soft);
@@ -60,7 +59,7 @@ button.secondary:hover {
     justify-content: center;
     cursor: pointer;
     padding: 0;
-    font-size: 0.9rem;
+    font-size: 1.4rem;
     transition: opacity 0.15s ease, background 0.15s ease;
 }
 
@@ -74,9 +73,9 @@ button.secondary:hover {
 .player-row {
     display: grid;
     grid-template-columns: minmax(0, 1.3fr) auto;
-    gap: 8px;
+    gap: 14px;
     align-items: center;
-    padding: 8px 10px;
+    padding: 14px 16px;
     border-radius: var(--radius-sm);
     background: rgba(5, 7, 15, 0.92);
     border: 1px solid rgba(60, 70, 110, 0.7);
@@ -84,12 +83,12 @@ button.secondary:hover {
 
 .player-row input[type="text"] {
     width: 100%;
-    padding: 6px 8px;
-    border-radius: 6px;
+    padding: 12px 14px;
+    border-radius: 10px;
     border: 1px solid var(--border);
     background: #050712;
     color: var(--fg);
-    font-size: 0.9rem;
+    font-size: 1.2rem;
 }
 
 .player-row input[type="text"]::placeholder {
@@ -99,39 +98,39 @@ button.secondary:hover {
 /* -------------------- Race Chip (Setup Panel) -------------------- */
 
 .race-chip {
-    padding: 6px 10px;
+    padding: 12px 18px;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.07);
     background: radial-gradient(circle at top left,
         rgba(255, 255, 255, 0.06),
         rgba(0, 0, 0, 0.92)
     );
-    font-size: 0.75rem;
+    font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: var(--fg);
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     cursor: pointer;
     transition: box-shadow 0.15s ease, transform 0.1s ease;
 }
 
 .race-chip:hover {
     box-shadow: var(--glow-soft);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 
 .race-chip-inner {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
 }
 
 .race-chip-glyph {
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
     overflow: hidden;
     background: radial-gradient(circle at top,
         rgba(255, 255, 255, 0.12),
@@ -149,17 +148,17 @@ button.secondary:hover {
 }
 
 .race-chip-dot {
-    width: 9px;
-    height: 9px;
+    width: 14px;
+    height: 14px;
     border-radius: 999px;
     background: var(--faction-color, var(--accent));
-    box-shadow: 0 0 8px rgba(78, 201, 240, 0.8);
+    box-shadow: 0 0 10px rgba(78, 201, 240, 0.8);
 }
 
 /* -------------------- Race Modal Cards -------------------- */
 
 .race-card {
-    padding: 12px;
+    padding: 24px;
     border-radius: var(--radius-sm);
 
     background: linear-gradient(145deg,
@@ -171,7 +170,7 @@ button.secondary:hover {
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 14px;
     position: relative;
     overflow: hidden;
 
@@ -182,35 +181,26 @@ button.secondary:hover {
 }
 
 .race-card:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 0 14px rgba(78, 201, 240, 0.35);
+    transform: translateY(-4px);
+    box-shadow: 0 0 22px rgba(78, 201, 240, 0.35);
     border-color: var(--faction-color);
 }
 
 .race-card:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
-}
-
-.race-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-left: 4px solid var(--faction-color, var(--accent));
-    opacity: 0.9;
 }
 
 .race-card-main {
     display: flex;
     align-items: center;
-    gap: 10px;
-    filter: drop-shadow(0 0 6px rgba(0,0,0,0.6));
+    gap: 18px;
 }
 
 .race-card-glyph {
-    width: 36px;
-    height: 36px;
-    border-radius: 6px;
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
     overflow: hidden;
 
     background: radial-gradient(circle at top,
@@ -231,37 +221,41 @@ button.secondary:hover {
 }
 
 .race-card-name {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 800;
     color: var(--fg);
     letter-spacing: 0.03em;
     text-shadow: 0 0 6px rgba(0,0,0,0.6);
 }
 
 .race-card-meta {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
     color: var(--fg-soft);
     opacity: 0.9;
 }
 
-/* -------------------- Order List Items -------------------- */
+/* -------------------- Order List Items (PASS BUTTONS) -------------------- */
 
 .order-item {
-    padding: 8px 10px;
+    padding: 24px 22px; /* HUGE tap area */
     border-radius: var(--radius-sm);
     background: rgba(5, 7, 15, 0.92);
     border: 1px solid rgba(60, 70, 110, 0.7);
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     cursor: pointer;
     position: relative;
     overflow: hidden;
+
     transition: transform 0.1s ease, box-shadow 0.15s ease;
+    font-size: 1.4rem; /* BIG text */
 }
 
 .order-item:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     box-shadow: var(--glow-soft);
 }
 
@@ -271,7 +265,7 @@ button.secondary:hover {
     left: 0;
     top: 0;
     bottom: 0;
-    width: 3px;
+    width: 6px;
     background: var(--faction-color, var(--accent));
 }
 
@@ -281,23 +275,24 @@ button.secondary:hover {
 }
 
 .order-name {
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-weight: 800;
+    font-size: 1.6rem;
     color: var(--fg);
 }
 
 .order-race {
-    font-size: 0.8rem;
+    font-size: 1.2rem;
     color: var(--fg-soft);
 }
 
 .order-status {
-    font-size: 0.8rem;
+    font-size: 1.4rem;
+    font-weight: 700;
     color: var(--fg-soft);
 }
 
 .order-item.passed {
-    opacity: 0.4;
+    opacity: 0.45;
 }
 
 .order-item.passed .order-status {
