@@ -2,6 +2,7 @@
    FIREBASE INITIALISATION + SHARED GAME STATE
    - Hidden auto-reset on first load
    - Shared /gameState across all devices
+   - Compatible with Eclipse-style pass system in state.js
 ----------------------------------------------------------- */
 
 const firebaseConfig = {
