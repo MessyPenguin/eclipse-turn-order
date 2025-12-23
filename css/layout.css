@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------
-   LAYOUT — Wide, Readable, Table-Friendly UI
+   LAYOUT — 10-inch Tablet Optimised, Large UI
 ----------------------------------------------------------- */
 
 :root {
@@ -13,11 +13,13 @@
     --border: rgba(255,255,255,0.12);
     --border-soft: rgba(255,255,255,0.06);
 
-    --radius: 12px;
-    --radius-sm: 8px;
+    --radius: 14px;
+    --radius-sm: 10px;
 
     --shadow-deep: 0 0 30px rgba(0,0,0,0.6);
     --glow-soft: 0 0 12px rgba(78, 201, 240, 0.4);
+
+    font-size: 20px; /* GLOBAL SCALE UP */
 }
 
 /* -------------------- Page Layout -------------------- */
@@ -37,12 +39,12 @@ body {
 
 main {
     width: 100%;
-    max-width: 760px; /* wider for table readability */
-    padding: 20px 20px 40px;
+    max-width: 1000px; /* WIDE for 10-inch tablet */
+    padding: 24px 24px 48px;
 
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 28px;
 
     margin-left: auto;
     margin-right: auto;
@@ -54,7 +56,7 @@ main {
     background: rgba(10, 12, 25, 0.9);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 20px;
+    padding: 24px;
     box-shadow: var(--shadow-deep);
     width: 100%;
 }
@@ -66,7 +68,7 @@ main {
 }
 
 #setupBody {
-    margin-top: 12px;
+    margin-top: 16px;
 }
 
 #setupBody.collapsed {
@@ -74,9 +76,9 @@ main {
 }
 
 #setupSummary {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: var(--fg-soft);
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 /* -------------------- Order List -------------------- */
@@ -88,7 +90,7 @@ main {
 
     display: flex;
     flex-direction: column;
-    gap: 16px; /* more breathing room */
+    gap: 22px; /* more breathing room */
     width: 100%;
 }
 
@@ -96,18 +98,18 @@ main {
 
 #turnDisplay {
     text-align: center;
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin-top: 8px;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-top: 12px;
 }
 
 /* -------------------- Hint Text -------------------- */
 
 #hintText {
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: var(--fg-soft);
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 /* -------------------- Race Modal -------------------- */
@@ -128,7 +130,7 @@ main {
 }
 
 .modal {
-    width: min(520px, 92vw); /* slightly wider */
+    width: min(600px, 92vw);
     max-height: 82vh;
     overflow-y: auto;
 
@@ -136,7 +138,7 @@ main {
     border-radius: var(--radius);
     border: 1px solid rgba(120, 140, 255, 0.25);
 
-    padding: 20px 22px 24px;
+    padding: 28px 28px 32px;
     box-shadow:
         0 0 25px rgba(0, 0, 0, 0.7),
         0 0 18px rgba(78, 201, 240, 0.25);
@@ -148,42 +150,36 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
-    padding-bottom: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 #raceModalTitle {
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 1.6rem;
+    font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--fg);
-    text-shadow: 0 0 6px rgba(0,0,0,0.6);
 }
 
 #closeRaceModalBtn {
     color: var(--fg);
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     opacity: 0.8;
-    transition: opacity 0.15s ease;
-}
-
-#closeRaceModalBtn:hover {
-    opacity: 1;
 }
 
 /* -------------------- Race Grid (Bigger Cards) -------------------- */
 
 .race-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); /* bigger */
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
     padding-bottom: 10px;
 }
 
 .race-card {
-    padding: 18px; /* bigger card */
+    padding: 24px;
     border-radius: var(--radius-sm);
 
     background: linear-gradient(145deg,
@@ -195,7 +191,7 @@ main {
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 14px;
     position: relative;
     overflow: hidden;
 
@@ -206,26 +202,15 @@ main {
 }
 
 .race-card:hover:not(:disabled) {
-    transform: translateY(-3px);
-    box-shadow: 0 0 18px rgba(78, 201, 240, 0.35);
+    transform: translateY(-4px);
+    box-shadow: 0 0 22px rgba(78, 201, 240, 0.35);
     border-color: var(--faction-color);
 }
 
-.race-card:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-}
-
-.race-card-main {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
 .race-card-glyph {
-    width: 48px;   /* bigger glyph */
-    height: 48px;
-    border-radius: 8px;
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
     overflow: hidden;
 
     background: radial-gradient(circle at top,
@@ -235,20 +220,10 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    box-shadow: 0 0 8px rgba(0,0,0,0.6);
 }
 
 .race-card-name {
-    font-size: 1.2rem; /* bigger text */
-    font-weight: 700;
+    font-size: 1.4rem;
+    font-weight: 800;
     color: var(--fg);
-    letter-spacing: 0.03em;
-    text-shadow: 0 0 6px rgba(0,0,0,0.6);
-}
-
-.race-card-meta {
-    font-size: 1rem;
-    color: var(--fg-soft);
-    opacity: 0.9;
 }
