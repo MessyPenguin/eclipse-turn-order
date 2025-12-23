@@ -198,48 +198,6 @@ function openRaceModal(playerIndex) {
   raceSelectPlayerIndex = playerIndex;
   renderRaceModal();
   raceModalBackdrop.classList.add("visible");
-  raceGridEl.innerHTML = "";
-
-  RACES.forEach(r => {
-    const card = document.createElement("div");
-    card.className = "race-option ${r.id}";
-
-    const main = document.createElement("div");
-    main.className = "race-card-main";
-
-    const glyphDiv = document.createElement("div");
-    glyphDiv.className = "race-card-glyph";
-    if (r.glyph) {
-      const img = document.createElement("img");
-      img.src = r.glyph;
-      img.alt = r.name;
-      glyphDiv.appendChild(img);
-    } else {
-      glyphDiv.textContent = r.name.charAt(0);
-    }
-
-    const nameDiv = document.createElement("div");
-    nameDiv.className = "race-card-name";
-    nameDiv.textContent = r.name;
-
-    main.appendChild(glyphDiv);
-    main.appendChild(nameDiv);
-    card.appendChild(main);
-
-    card.addEventListener("click", () => {
-      const p = players[playerIndex];
-      p.raceId = r.id;
-      p.raceName = r.name;
-      p.glyph = r.glyph || "";
-      closeRaceModal();
-      renderSetupPlayers();
-      updateSetupSummary();
-    });
-
-    raceGridEl.appendChild(card);
-  });
-
-  raceModalBackdrop.classList.add("visible");
 }
 
 function closeRaceModal() {
@@ -440,6 +398,7 @@ function formatOrdinal(n) {
 function cryptoRandomId() {
   return Math.random().toString(36).slice(2, 10);
 }
+
 
 
 
