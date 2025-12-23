@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------
-   APP ENTRY POINT
+   APP ENTRY POINT (LOCAL ONLY)
 ----------------------------------------------------------- */
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -11,7 +11,4 @@ window.addEventListener("DOMContentLoaded", () => {
     setPlayerCount(document.getElementById("playerCount").value);
     renderSetupFromState();
     renderOrderFromState();
-
-    // Shared state via Firebase
-    initSharedGameState();
 });
