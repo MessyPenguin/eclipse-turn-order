@@ -164,9 +164,13 @@ button.secondary:hover {
 }
 
 .race-card-name {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
+    color: var(--fg);              /* brighter text */
+    letter-spacing: 0.03em;        /* subtle sci-fi spacing */
+    text-shadow: 0 0 6px rgba(0,0,0,0.6); /* improves contrast on dark bg */
 }
+
 
 .race-card-meta {
     font-size: 0.75rem;
@@ -225,3 +229,4 @@ button.secondary:hover {
 .order-item.passed .order-status {
     color: var(--success);
 }
+
