@@ -1,95 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Eclipse Turn Order</title>
 
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <link rel="stylesheet" href="components.css" />
 </head>
 
 <body>
-    <div id="app">
-        <header id="appHeader">
-            <h1>Eclipse Turn Order</h1>
-            <p id="hintText">Add players and races, then start the round.</p>
-        </header>
 
-        <!-- Collapsible setup panel -->
-        <section id="setupPanel" class="panel panel-collapsible">
-            <div class="panel-header setup-header">
-                <div class="setup-header-main">
-                    <h2>Setup</h2>
-                    <span id="setupSummary" class="setup-summary">No players yet</span>
-                </div>
-                <button id="toggleSetupBtn" class="icon-btn" aria-expanded="true">
-                    <span id="toggleSetupIcon">▾</span>
-                </button>
+    <h1 class="app-title">Eclipse Turn Order</h1>
+
+    <main>
+
+        <!-- SETUP PANEL -->
+        <section id="setupPanel">
+
+            <header id="setupHeader">
+                <h2>Setup</h2>
+                <button id="startGameBtn">Start Game</button>
+            </header>
+
+            <div id="setupBody">
+
+                <!-- PLAYER NAME INPUTS -->
+                <div id="playerList"></div>
+
+                <!-- ADD PLAYER BUTTON -->
+                <button id="addPlayerBtn" class="secondary">Add Player</button>
+
+                <!-- RACE SELECTION -->
+                <h3>Select Races</h3>
+                <div id="raceChipContainer"></div>
+
             </div>
 
-            <div id="setupBody" class="setup-body">
-                <div class="setup-controls">
-                    <label for="playerCount">Players</label>
-                    <select id="playerCount">
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4" selected>4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                    </select>
-                    <button id="quickSetupBtn" class="secondary">Quick setup</button>
-                </div>
-
-                <div id="playerRows"></div>
-
-                <div class="setup-actions">
-                    <button id="startRoundBtn">Start round</button>
-                </div>
-            </div>
+            <div id="setupSummary"></div>
         </section>
 
-        <!-- Turn order panel -->
-        <section id="orderPanel" class="panel">
-            <div class="panel-header">
-                <h2>Turn order</h2>
-                <span id="turnDisplay">Turn: 1</span>
-            </div>
+        <!-- GAME UI -->
+        <div id="turnDisplay"></div>
+        <div id="hintText"></div>
 
-            <ul id="orderList" class="order-list"></ul>
+        <ul id="orderList"></ul>
 
-            <div class="order-actions">
-                <button id="undoBtn" class="secondary" style="display:none;">Undo last pass</button>
-            </div>
-        </section>
-    </div>
+    </main>
 
-    <!-- Race selection modal -->
-    <div id="raceModalBackdrop" class="modal-backdrop" data-close-modal="race">
-        <div id="raceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="raceModalTitle">
+    <!-- RACE MODAL -->
+    <div class="modal-backdrop" id="raceModalBackdrop">
+        <div class="modal">
             <div class="modal-header">
-                <h2 id="raceModalTitle">Select race</h2>
-                <button id="closeRaceModalBtn" class="icon-btn" aria-label="Close race selection">✕</button>
+                <h2 id="raceModalTitle">Choose Race</h2>
+                <button id="closeRaceModalBtn" class="icon-btn">×</button>
             </div>
-            <div id="raceGrid" class="race-grid">
-                <!-- populated by JS -->
-            </div>
+            <div class="race-grid" id="raceGrid"></div>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-
-    <!-- JS modules -->
-    <script src="js/state.js"></script>
-    <script src="js/races.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/gestures.js"></script>
-    <script src="js/audio.js"></script>
-    <script src="js/firebase.js"></script>
-    <script src="js/main.js"></script>
+    <script src="ui.js"></script>
 </body>
 </html>
