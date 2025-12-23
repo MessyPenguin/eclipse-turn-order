@@ -85,10 +85,10 @@ button.secondary:hover {
     cursor: pointer;
 }
 
-.race-chip-inner {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+.race-chip-inner span {
+    color: var(--fg);
+    font-weight: 600;
+    text-shadow: 0 0 4px rgba(0,0,0,0.6);
 }
 
 .race-chip-glyph {
@@ -173,9 +173,11 @@ button.secondary:hover {
 
 
 .race-card-meta {
-    font-size: 0.75rem;
-    color: var(--muted);
+    font-size: 0.8rem;
+    color: var(--fg-soft);         /* brighter than muted */
+    opacity: 0.9;
 }
+
 
 /* Order list items */
 
@@ -229,4 +231,5 @@ button.secondary:hover {
 .order-item.passed .order-status {
     color: var(--success);
 }
+
 
