@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eclipse Turn Order</title>
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+
+<body>
+    <div id="app">
+        <header id="appHeader">
+            <h1>Eclipse Turn Order</h1>
+            <p id="hintText">Add players and races, then start the round.</p>
+        </header>
+
+        <section id="setupPanel" class="panel">
+            <div class="panel-header">
+                <h2>Setup</h2>
+            </div>
+
+            <div class="setup-controls">
+                <label for="playerCount">Players:</label>
+                <select id="playerCount">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4" selected>4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+                <button id="quickSetupBtn">Quick setup</button>
+            </div>
+
+            <div id="playerRows"></div>
+
+            <div class="setup-actions">
+                <button id="startRoundBtn">Start round</button>
+            </div>
+        </section>
+
+        <section id="orderPanel" class="panel">
+            <div class="panel-header">
+                <h2>Turn order</h2>
+                <span id="turnDisplay">Turn: 1</span>
+            </div>
+
+            <ul id="orderList" class="order-list"></ul>
+
+            <div class="order-actions">
+                <button id="undoBtn" class="secondary" style="display:none;">Undo last pass</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+    <!-- JS modules -->
+    <script src="js/state.js"></script>
+    <script src="js/races.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/gestures.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

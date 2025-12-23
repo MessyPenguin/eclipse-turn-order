@@ -1,0 +1,108 @@
+#app {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+#appHeader {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+#appHeader h1 {
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+#hintText {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.panel {
+    background: linear-gradient(135deg, var(--panel), var(--panel-alt));
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    padding: 12px 12px 14px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+.panel-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.panel-header h2 {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+}
+
+#turnDisplay {
+    font-size: 0.9rem;
+    color: var(--accent);
+}
+
+.setup-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.setup-controls label {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+#playerCount {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #090b12;
+    color: var(--fg);
+}
+
+.setup-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#playerRows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.order-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.order-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+@media (min-width: 768px) {
+    #app {
+        padding: 24px;
+    }
+
+    #appHeader h1 {
+        font-size: 1.8rem;
+    }
+}

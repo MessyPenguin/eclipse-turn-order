@@ -1,0 +1,9 @@
+.faction-terran { --faction-color: #4ec9f0; }
+.faction-eridani { --faction-color: #ffb347; }
+.faction-planta { --faction-color: #7fff7f; }
+.faction-hydran { --faction-color: #a77bff; }
+.faction-generic { --faction-color: #c0c0ff; }
+
+.glow-soft {
+    box-shadow: var(--glow-soft);
+}
