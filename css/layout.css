@@ -31,6 +31,97 @@ main {
   gap: 24px;
 }
 
+.app {
+  width: 100%;
+  max-width: 1024px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(0,0,0,0.65));
+  border-radius: var(--radius);
+  padding: 18px 16px 24px;
+  margin: 12px auto 24px;
+  box-shadow: var(--shadow-deep);
+  border: 1px solid rgba(255,255,255,0.04);
+  backdrop-filter: blur(6px);
+}
+
+@media (min-width: 700px) {
+  .app { padding: 24px 28px 30px; margin-top: 24px; }
+}
+
+/* Topbar */
+.topbar {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px 6px;
+}
+
+.topbar-left { display: flex; flex-direction: column; gap: 4px; }
+.topbar-sub { margin: 0; color: var(--fg-soft); font-size: 0.95rem; }
+.topbar-actions { display: flex; align-items: center; gap: 12px; }
+
+/* Two-column layout on wide screens: setup + game */
+@media (min-width: 980px) {
+  main {
+    display: grid;
+    grid-template-columns: 1fr minmax(640px, 760px) 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* center the main panels in the middle column */
+  #setupPanel, #gamePanel {
+    grid-column: 2;
+    width: 100%;
+  }
+}
+
+/* Topbar visual and small-screen behavior */
+.topbar {
+  background: var(--topbar-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--surface-contrast);
+  padding: 12px 18px;
+  box-shadow: var(--shadow-deep);
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  main { padding: 12px; }
+}
+
+/* Order list scrolling and spacing */
+#orderList {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Improve modal focus visuals */
+.modal:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(78,201,240,0.12);
+}
+
+.modal-backdrop.visible {
+  animation: fadeIn 180ms ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* -----------------------------------------------------------
    SETUP PANEL
 ----------------------------------------------------------- */
@@ -41,7 +132,9 @@ main {
   border-radius: var(--radius);
   padding: 24px;
   box-shadow: var(--shadow-deep);
-  transition: transform 0.35s ease, opacity 0.35s ease, height 0.35s ease;
+  max-height: 2400px;
+  overflow: hidden;
+  transition: max-height 0.45s ease, transform 0.35s ease, opacity 0.35s ease, padding 0.35s ease;
 }
 
 #setupHeader {
@@ -153,27 +246,39 @@ main {
   padding: 20px 24px 24px;
   box-shadow: var(--shadow-deep);
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(20px) scale(0.98);
   pointer-events: none;
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
 }
 
 body.game-started #setupPanel {
   opacity: 0;
-  transform: translateY(-40px);
-  height: 0;
+  transform: translateY(-30px);
+  max-height: 0;
   padding-top: 0;
   padding-bottom: 0;
   margin: 0;
-  overflow: hidden;
   pointer-events: none;
   border: none;
 }
 
 body.game-started #gamePanel {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   pointer-events: auto;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.6), 0 0 30px rgba(73,167,255,0.06);
+}
+
+/* center content inside the game panel and constrain order list width */
+#gamePanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#orderList {
+  width: 100%;
+  max-width: 720px;
 }
 
 /* -----------------------------------------------------------
@@ -187,11 +292,12 @@ body.game-started #gamePanel {
   background: rgba(15, 18, 32, 0.85);
   border: 1px solid var(--border-soft);
   border-radius: 12px;
-  padding: 14px 18px;
-  margin-bottom: 12px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
   transition: background 0.25s ease, transform 0.15s ease;
-  min-height: 64px;
+  min-height: 50px;
   cursor: pointer;
+  font-family: "Rajdhani", system-ui, sans-serif;
 }
 
 .order-item:active {
@@ -204,12 +310,7 @@ body.game-started #gamePanel {
   border-color: rgba(255, 255, 255, 0.05);
 }
 
-.order-item.passed::after {
-  content: "Passed";
-  font-size: 0.9rem;
-  color: var(--fg-soft);
-  margin-left: 12px;
-}
+/* removed visual ::after badge so status aligns consistently with right column */
 
 .order-main {
   display: flex;
@@ -237,6 +338,46 @@ body.game-started #gamePanel {
   font-size: 1rem;
   color: var(--fg-soft);
 }
+
+/* Sci‑fi status display */
+.order-status {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-family: "Rajdhani", system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+}
+
+/* Race-coloured borders + subtle glow for order items */
+.order-item.race-terran      { border-color: #4da3ff; box-shadow: 0 8px 28px #4da3f116; }
+.order-item.race-planta      { border-color: #4cff4c; box-shadow: 0 8px 28px #4cff4c16; }
+.order-item.race-hydran      { border-color: #9d7bff; box-shadow: 0 8px 28px #9d7bff16; }
+.order-item.race-orion       { border-color: #ff4d4d; box-shadow: 0 8px 28px #ff4d4d16; }
+.order-item.race-mechanema   { border-color: #ffd24d; box-shadow: 0 8px 28px #ffd24d16; }
+.order-item.race-exiles      { border-color: #00e0ff; box-shadow: 0 8px 28px #00e0ff16; }
+.order-item.race-magellan    { border-color: #ff7b00; box-shadow: 0 8px 28px #ff7b0016; }
+.order-item.race-rhoindi     { border-color: #ff66cc; box-shadow: 0 8px 28px #ff66cc16; }
+.order-item.race-draco       { border-color: #aa00ff; box-shadow: 0 8px 28px #aa00ff16; }
+.order-item.race-eridani     { border-color: #ffaa00; box-shadow: 0 8px 28px #ffaa0016; }
+.order-item.race-lyra        { border-color: #66aaff; box-shadow: 0 8px 28px #66aaff16; }
+
+/* accent the glyph area with a faint glow matching faction */
+.order-item.race-terran .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #4da3ff22; pointer-events: none; }
+.order-item.race-planta .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #4cff4c22; pointer-events: none; }
+.order-item.race-hydran .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #9d7bff22; pointer-events: none; }
+.order-item.race-orion .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #ff4d4d22; pointer-events: none; }
+.order-item.race-mechanema .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #ffd24d22; pointer-events: none; }
+.order-item.race-exiles .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #00e0ff22; pointer-events: none; }
+.order-item.race-magellan .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #ff7b0022; pointer-events: none; }
+.order-item.race-rhoindi .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #ff66cc22; pointer-events: none; }
+.order-item.race-draco .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #aa00ff22; pointer-events: none; }
+.order-item.race-eridani .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #ffaa0022; pointer-events: none; }
+.order-item.race-lyra .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #66aaff22; pointer-events: none; }
+
+/* ensure order-glyph is positioned for pseudo-element */
+.order-glyph { position: relative; }
 
 /* -----------------------------------------------------------
    PASS BUTTON
@@ -295,7 +436,7 @@ body.game-started #gamePanel {
 ----------------------------------------------------------- */
 
 .modal {
-  width: min(600px, 92vw);
+  width: min(800px, 95vw);
   max-height: 82vh;
   overflow-y: auto;
   background: linear-gradient(160deg, #0d1124 0%, #1a1f3a 100%);
@@ -309,8 +450,8 @@ body.game-started #gamePanel {
 
 .race-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
   padding: 10px 0;
 }
 
@@ -332,21 +473,22 @@ body.game-started #gamePanel {
 }
 
 .race-option img {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
-  margin-bottom: 12px;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.15));
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.12));
 }
 
 .race-option-name {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.03em;
+  word-break: break-word;
 }
 
 /* -----------------------------------------------------------
-   FACTION COLOUR GLOWS
+   FACTION COLOUR GLOWS (modal and order items use these colors now)
 ----------------------------------------------------------- */
 
 .race-option.terran      { border-color: #4da3ff; box-shadow: 0 0 12px #4da3ff55; }
@@ -356,6 +498,14 @@ body.game-started #gamePanel {
 .race-option.mechanema   { border-color: #ffd24d; box-shadow: 0 0 12px #ffd24d55; }
 .race-option.exiles      { border-color: #00e0ff; box-shadow: 0 0 12px #00e0ff55; }
 .race-option.magellan    { border-color: #ff7b00; box-shadow: 0 0 12px #ff7b0055; }
+.race-option.rhoindi     { border-color: #ff66cc; box-shadow: 0 0 12px #ff66cc55; }
+.race-option.enclave     { border-color: #b3b3b3; box-shadow: 0 0 12px #b3b3b355; }
+.race-option.wardens     { border-color: #66ffcc; box-shadow: 0 0 12px #66ffcc55; }
+.race-option.shapers     { border-color: #ff66ff; box-shadow: 0 0 12px #ff66ff55; }
+.race-option.lyra        { border-color: #66aaff; box-shadow: 0 0 12px #66aaff55; }
+.race-option.keepers     { border-color: #ffaa00; box-shadow: 0 0 12px #ffaa0055; }
+.race-option.architects  { border-color: #00ffaa; box-shadow: 0 0 12px #00ffaa55; }
+.race-option.riftborn    { border-color: #aa66ff; box-shadow: 0 0 12px #aa66ff55; }
 .race-option.rhoindi     { border-color: #ff66cc; box-shadow: 0 0 12px #ff66cc55; }
 .race-option.enclave     { border-color: #b3b3b3; box-shadow: 0 0 12px #b3b3b355; }
 .race-option.wardens     { border-color: #66ffcc; box-shadow: 0 0 12px #66ffcc55; }

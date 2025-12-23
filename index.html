@@ -5,6 +5,9 @@
   <title>Eclipse Turn Order</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Sci-fi fonts used by Turn Order 2 design -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
   <link rel="stylesheet" href="css/theme.css" />
   <link rel="stylesheet" href="css/layout.css" />
   <link rel="stylesheet" href="css/components.css" />
@@ -13,8 +16,34 @@
 </head>
 
 <body>
-  <h1 class="app-title">Eclipse Turn Order</h1>
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1 class="app-title">Eclipse Turn Order</h1>
+      <p class="topbar-sub">Quick turn-order tracker for Eclipse</p>
+    </div>
 
+    <div class="topbar-actions">
+      <label for="playerCountSelect" class="player-count-label">
+        Players
+        <select id="playerCountSelect">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+        </select>
+      </label>
+
+      <button id="startGameBtn" class="primary">Start Game</button>
+      <button id="newGameBtn" class="secondary" hidden>New Game</button>
+    </div>
+  </header>
+
+  <div class="app">
   <main>
 
     <!-- SETUP PANEL -->
@@ -23,25 +52,6 @@
         <div>
           <h2>Setup</h2>
           <p class="setup-subtitle">Configure players and races, then start the game.</p>
-        </div>
-
-        <div class="setup-controls-right">
-          <label for="playerCountSelect" class="player-count-label">
-            Players
-            <select id="playerCountSelect">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4" selected>4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-            </select>
-          </label>
-
-          <button id="startGameBtn">Start Game</button>
         </div>
       </header>
 
@@ -68,9 +78,11 @@
 
   </main>
 
+  </div>
+
   <!-- RACE MODAL -->
   <div class="modal-backdrop" id="raceModalBackdrop">
-    <div class="modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="raceModalTitle" tabindex="-1">
       <div class="modal-header">
         <h2 id="raceModalTitle">Choose Race</h2>
         <button id="closeRaceModalBtn" class="icon-btn" type="button">×</button>

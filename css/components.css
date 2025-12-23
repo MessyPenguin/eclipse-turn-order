@@ -5,14 +5,31 @@
 /* Buttons */
 
 button {
-  padding: 12px 20px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background: var(--accent);
-  color: #020308;
-  font-weight: 700;
-  font-size: 1.1rem;
+  padding: 11px 20px;
+  font-size: 0.95rem;
   cursor: pointer;
+  border-radius: 999px;
+  border: none;
+  background: radial-gradient(circle at top left, #6cb5ff, var(--accent));
+  color: #ffffff;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  transition: background 0.15s ease, transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  font-family: "Rajdhani", system-ui, sans-serif;
+}
+
+/* Primary modifier (smaller variants for topbar) */
+.primary {
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  background: radial-gradient(circle at top left, #6cb5ff, var(--accent));
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
 }
 
 button.secondary {
@@ -41,11 +58,15 @@ button:disabled {
   font-size: 1.4rem;
 }
 
+/* Topbar specific tweaks */
+.topbar .player-count-label { font-size: 0.9rem; color: var(--fg-soft); }
+.topbar .player-count-label select { padding: 6px 10px; border-radius: 999px; font-size: 0.95rem; }
+
 /* Player Rows in Setup */
 
 .player-row {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) auto;
+  grid-template-columns: 1fr auto; /* make name input wider */
   gap: 12px;
   align-items: center;
   padding: 12px 14px;
@@ -64,6 +85,36 @@ button:disabled {
   font-size: 1.1rem;
 }
 
+/* Focus and hover states for keyboard users */
+button:focus-visible,
+.race-option:focus-visible,
+.player-row input:focus-visible,
+.order-item:focus-visible {
+  outline: 3px solid rgba(78,201,240,0.18);
+  outline-offset: 3px;
+}
+
+button:hover { transform: translateY(-1px); }
+
+.race-option:hover:not(.disabled),
+.race-option:active:not(.disabled) {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.order-item:hover,
+.order-item:focus {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.6), 0 0 18px rgba(78,201,240,0.06);
+}
+
+.player-row {
+  transition: box-shadow 0.15s ease, transform 0.12s ease;
+}
+
+.player-row:focus-within {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
 .player-row input[type="text"]::placeholder {
   color: var(--muted);
 }
@@ -76,16 +127,25 @@ button:disabled {
   gap: 10px;
 }
 
+#playerList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 700px) {
+  #playerList { grid-template-columns: 1fr; }
+}
+
 .player-race-glyph {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
   overflow: hidden;
-  background: radial-gradient(circle at top,
-    rgba(255,255,255,0.12),
-    rgba(0,0,0,0.9)
-  );
-  display: flex;
+  background: linear-gradient(180deg, rgba(6,7,10,0.95), rgba(12,14,18,0.96));
+  border: 1px solid rgba(255,255,255,0.03);
+  padding: 3px; /* slightly smaller padding so assets fit */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }
@@ -93,13 +153,49 @@ button:disabled {
 .player-race-glyph img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: contain; /* ensure entire glyph fits without clipping */
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.12); /* thin white box around image */
+  box-sizing: border-box;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.player-race-glyph img.placeholder {
+  opacity: 0.45;
+  filter: grayscale(40%) brightness(0.85);
 }
 
 .player-race-name {
   font-size: 1rem;
   color: var(--fg-soft);
 }
+
+/* Choose-race button used in setup rows — darker blue pill */
+.race-select-button {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  height: 48px;
+  min-width: 140px;
+  border-radius: 10px; /* square-ish */
+  border: 1px solid rgba(18,62,120,0.9);
+  background: linear-gradient(180deg, rgba(12,40,84,0.9), rgba(6,12,24,0.96));
+  color: var(--fg);
+  font-size: 0.9rem;
+  text-transform: none;
+  letter-spacing: 0.06em;
+  font-family: "Rajdhani", system-ui, sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 6px 18px rgba(6,12,24,0.6);
+}
+
+.race-select-button span.race-label { opacity: 0.85; }
+
+.race-select-button:hover { filter: brightness(1.06); }
 
 /* Race Cards in Modal */
 
@@ -174,8 +270,8 @@ button:disabled {
 }
 
 .order-glyph {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
   overflow: hidden;
   background: radial-gradient(circle at top,
@@ -210,15 +306,17 @@ button:disabled {
 }
 
 .order-status {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--fg-soft);
+  min-width: 90px;
+  text-align: right;
 }
 
 /* Passed styling */
 
 .order-item.passed {
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .order-item.passed .order-status {
