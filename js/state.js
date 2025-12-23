@@ -58,16 +58,27 @@ function allPlayersPassed() {
 
 /** Randomise player order for a new round, keeping only filled players. */
 function randomisePlayerOrder() {
-    const filled = getActivePlayers();
-    // Fisher–Yates
-    for (let i = filled.length - 1; i > 0; i--) {
+    const active = getActivePlayers();
+
+    // Shuffle active players
+    for (let i = active.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [filled[i], filled[j]] = [filled[j], filled[i]];
+        [active[i], active[j]] = [active[j], active[i]];
     }
-    players = filled;
+
+    // Rebuild full players array
+    let activeIndex = 0;
+    players = players.map(p => {
+        if (p.name && p.raceId) {
+            return active[activeIndex++];
+        }
+        return p;
+    });
+
     passedOrder = [];
     lastPassed = null;
     turn = 1;
+
     if (typeof syncToFirebase === "function") syncToFirebase();
 }
 
@@ -119,21 +130,33 @@ function finishRoundAndReorder() {
     const active = getActivePlayers();
     if (active.length === 0) return;
 
-    // Build new order based purely on passedOrder
-    const newOrder = passedOrder
+    // Build new order based on pass order
+    const newActiveOrder = passedOrder
         .map(name => active.find(p => p.name === name))
         .filter(Boolean);
 
-    // In case something weird happens, fall back to active list
-    if (newOrder.length !== active.length) {
-        players = active;
-    } else {
-        players = newOrder;
+    // If mismatch, fall back to active list
+    if (newActiveOrder.length !== active.length) {
+        newActiveOrder = active;
     }
 
+    // Rebuild full players array:
+    // - Keep empty slots in place
+    // - Replace active players in order
+    let activeIndex = 0;
+    players = players.map(p => {
+        if (p.name && p.raceId) {
+            return newActiveOrder[activeIndex++];
+        }
+        return p; // keep empty slot
+    });
+
+    // Reset round state
     passedOrder = [];
     lastPassed = null;
     turn = 1;
 
     if (typeof syncToFirebase === "function") syncToFirebase();
 }
+
+
