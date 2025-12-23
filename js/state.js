@@ -1,9 +1,13 @@
 /* -----------------------------------------------------------
    CORE GAME STATE
+   - Players
+   - Pass order
+   - Turn tracking
+   - Eclipse-style "pass determines next round order"
 ----------------------------------------------------------- */
 
 let players = [];       // [{ name, raceId }]
-let passedOrder = [];   // [playerName, ...]
+let passedOrder = [];   // [playerName, ...] in the order they passed
 let lastPassed = null;
 let turn = 1;
 
@@ -41,9 +45,21 @@ function setPlayerRace(index, raceId) {
     if (typeof syncToFirebase === "function") syncToFirebase();
 }
 
+/** Active = players that actually have a name + race. */
+function getActivePlayers() {
+    return players.filter(p => p.name && p.raceId);
+}
+
+/** Have all active players passed? */
+function allPlayersPassed() {
+    const active = getActivePlayers();
+    return active.length > 0 && passedOrder.length >= active.length;
+}
+
 /** Randomise player order for a new round, keeping only filled players. */
 function randomisePlayerOrder() {
-    const filled = players.filter(p => p.name.trim() !== "" && p.raceId);
+    const filled = getActivePlayers();
+    // Fisher–Yates
     for (let i = filled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [filled[i], filled[j]] = [filled[j], filled[i]];
@@ -55,19 +71,34 @@ function randomisePlayerOrder() {
     if (typeof syncToFirebase === "function") syncToFirebase();
 }
 
-/** Mark given player (by index) as passed if not already. */
+/**
+ * Mark given player (by index) as passed if not already.
+ * When all players have passed, reorder players based on pass order
+ * and reset for the next round.
+ */
 function markPassedByIndex(index) {
     const player = players[index];
     if (!player) return;
+
     if (!passedOrder.includes(player.name)) {
         passedOrder.push(player.name);
         lastPassed = player.name;
         turn++;
-        if (typeof syncToFirebase === "function") syncToFirebase();
+
+        if (allPlayersPassed()) {
+            // Everyone has passed → finish round and generate next order
+            finishRoundAndReorder();
+        } else {
+            if (typeof syncToFirebase === "function") syncToFirebase();
+        }
     }
 }
 
-/** Undo last pass. */
+/**
+ * Undo last pass (only meaningful before the round finishes).
+ * Once everyone has passed and the next order is generated,
+ * passes are cleared and undo no longer affects the previous round.
+ */
 function undoLastPass() {
     if (passedOrder.length === 0) return;
     const popped = passedOrder.pop();
@@ -76,7 +107,33 @@ function undoLastPass() {
     if (typeof syncToFirebase === "function") syncToFirebase();
 }
 
-function allPlayersPassed() {
-    const active = players.filter(p => p.name && p.raceId);
-    return active.length > 0 && passedOrder.length >= active.length;
+/**
+ * Finish the current round and generate the next round order based
+ * on the order in which players passed.
+ *
+ * Eclipse logic:
+ * - First player to pass becomes first player next round
+ * - Last player to pass becomes last player next round
+ */
+function finishRoundAndReorder() {
+    const active = getActivePlayers();
+    if (active.length === 0) return;
+
+    // Build new order based purely on passedOrder
+    const newOrder = passedOrder
+        .map(name => active.find(p => p.name === name))
+        .filter(Boolean);
+
+    // In case something weird happens, fall back to active list
+    if (newOrder.length !== active.length) {
+        players = active;
+    } else {
+        players = newOrder;
+    }
+
+    passedOrder = [];
+    lastPassed = null;
+    turn = 1;
+
+    if (typeof syncToFirebase === "function") syncToFirebase();
 }
