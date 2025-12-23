@@ -1,4 +1,9 @@
-/* Buttons */
+/* -----------------------------------------------------------
+   COMPONENTS — Buttons, Player Rows, Race Chips, Modal Cards,
+   Order List Items, and Interaction Styling
+----------------------------------------------------------- */
+
+/* -------------------- Buttons -------------------- */
 
 button {
     padding: 8px 14px;
@@ -22,7 +27,7 @@ button {
 button:hover {
     background: #6fd9ff;
     box-shadow: var(--glow-soft);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 
 button:active {
@@ -41,7 +46,30 @@ button.secondary:hover {
     color: var(--fg);
 }
 
-/* Player rows */
+/* -------------------- Icon Buttons -------------------- */
+
+.icon-btn {
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--fg-soft);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.9rem;
+    transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.icon-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* -------------------- Player Rows -------------------- */
 
 .player-row {
     display: grid;
@@ -68,13 +96,16 @@ button.secondary:hover {
     color: var(--muted);
 }
 
-/* Race chip (button in setup) */
+/* -------------------- Race Chip (Setup Panel) -------------------- */
 
 .race-chip {
     padding: 6px 10px;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.07);
-    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.92));
+    background: radial-gradient(circle at top left,
+        rgba(255, 255, 255, 0.06),
+        rgba(0, 0, 0, 0.92)
+    );
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -83,12 +114,18 @@ button.secondary:hover {
     align-items: center;
     gap: 8px;
     cursor: pointer;
+    transition: box-shadow 0.15s ease, transform 0.1s ease;
 }
 
-.race-chip-inner span {
-    color: var(--fg);
-    font-weight: 600;
-    text-shadow: 0 0 4px rgba(0,0,0,0.6);
+.race-chip:hover {
+    box-shadow: var(--glow-soft);
+    transform: translateY(-1px);
+}
+
+.race-chip-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .race-chip-glyph {
@@ -96,7 +133,10 @@ button.secondary:hover {
     height: 18px;
     border-radius: 4px;
     overflow: hidden;
-    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.9));
+    background: radial-gradient(circle at top,
+        rgba(255, 255, 255, 0.12),
+        rgba(0, 0, 0, 0.9)
+    );
     display: flex;
     align-items: center;
     justify-content: center;
@@ -116,45 +156,67 @@ button.secondary:hover {
     box-shadow: 0 0 8px rgba(78, 201, 240, 0.8);
 }
 
-/* Race card in modal */
+/* -------------------- Race Modal Cards -------------------- */
 
 .race-card {
-    padding: 8px 8px;
+    padding: 12px;
     border-radius: var(--radius-sm);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.9));
+
+    background: linear-gradient(145deg,
+        rgba(255,255,255,0.05),
+        rgba(0,0,0,0.4)
+    );
+    border: 1px solid rgba(255,255,255,0.08);
+
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     position: relative;
     overflow: hidden;
+
+    transition:
+        transform 0.12s ease,
+        box-shadow 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.race-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 14px rgba(78, 201, 240, 0.35);
+    border-color: var(--faction-color);
 }
 
 .race-card::before {
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: inherit;
-    border-left: 3px solid var(--faction-color, var(--accent));
-    opacity: 0.7;
+    border-left: 4px solid var(--faction-color, var(--accent));
+    opacity: 0.9;
 }
 
 .race-card-main {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    filter: drop-shadow(0 0 6px rgba(0,0,0,0.6));
 }
 
 .race-card-glyph {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     border-radius: 6px;
     overflow: hidden;
-    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.9));
+
+    background: radial-gradient(circle at top,
+        rgba(255,255,255,0.15),
+        rgba(0,0,0,0.85)
+    );
     display: flex;
     align-items: center;
     justify-content: center;
+
+    box-shadow: 0 0 8px rgba(0,0,0,0.6);
 }
 
 .race-card-glyph img {
@@ -166,20 +228,18 @@ button.secondary:hover {
 .race-card-name {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--fg);              /* brighter text */
-    letter-spacing: 0.03em;        /* subtle sci-fi spacing */
-    text-shadow: 0 0 6px rgba(0,0,0,0.6); /* improves contrast on dark bg */
+    color: var(--fg);
+    letter-spacing: 0.03em;
+    text-shadow: 0 0 6px rgba(0,0,0,0.6);
 }
-
 
 .race-card-meta {
     font-size: 0.8rem;
-    color: var(--fg-soft);         /* brighter than muted */
+    color: var(--fg-soft);
     opacity: 0.9;
 }
 
-
-/* Order list items */
+/* -------------------- Order List Items -------------------- */
 
 .order-item {
     padding: 8px 10px;
@@ -192,6 +252,12 @@ button.secondary:hover {
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.order-item:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--glow-soft);
 }
 
 .order-item::before {
@@ -212,16 +278,17 @@ button.secondary:hover {
 .order-name {
     font-weight: 600;
     font-size: 0.95rem;
+    color: var(--fg);
 }
 
 .order-race {
     font-size: 0.8rem;
-    color: var(--muted);
+    color: var(--fg-soft);
 }
 
 .order-status {
     font-size: 0.8rem;
-    color: var(--muted);
+    color: var(--fg-soft);
 }
 
 .order-item.passed {
@@ -231,5 +298,3 @@ button.secondary:hover {
 .order-item.passed .order-status {
     color: var(--success);
 }
-
-
