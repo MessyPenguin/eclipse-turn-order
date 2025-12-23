@@ -1,324 +1,141 @@
-/* -----------------------------------------------------------
-   UI RENDERING + DOM BINDING (LOCAL ONLY)
------------------------------------------------------------ */
+// DOM elements
+const startGameBtn = document.getElementById("startGameBtn");
+const setupPanel = document.getElementById("setupPanel");
+const playerList = document.getElementById("playerList");
+const raceChipContainer = document.getElementById("raceChipContainer");
+const orderList = document.getElementById("orderList");
+const turnDisplay = document.getElementById("turnDisplay");
+const hintText = document.getElementById("hintText");
 
-let playerCountSelect;
-let playerRowsContainer;
-let startRoundBtn;
-let quickSetupBtn;
-let orderListEl;
-let hintTextEl;
-let turnDisplayEl;
-let undoBtnEl;
-let setupBodyEl;
-let toggleSetupBtnEl;
-let toggleSetupIconEl;
-let setupSummaryEl;
+// Example races
+const RACES = [
+    { id: "terran", name: "Terran" },
+    { id: "planta", name: "Planta" },
+    { id: "hydran", name: "Hydran" },
+    { id: "orion", name: "Orion" },
+    { id: "mechanema", name: "Mechanema" },
+    { id: "exiles", name: "Exiles" },
+    { id: "magellan", name: "Magellan" }
+];
 
-// Race modal
-let raceModalBackdropEl;
-let raceModalEl;
-let raceGridEl;
-let closeRaceModalBtnEl;
-let raceModalCurrentIndex = null;
+// State
+let players = [];
 
-function cacheDom() {
-    playerCountSelect   = document.getElementById("playerCount");
-    playerRowsContainer = document.getElementById("playerRows");
-    startRoundBtn       = document.getElementById("startRoundBtn");
-    quickSetupBtn       = document.getElementById("quickSetupBtn");
-    orderListEl         = document.getElementById("orderList");
-    hintTextEl          = document.getElementById("hintText");
-    turnDisplayEl       = document.getElementById("turnDisplay");
-    undoBtnEl           = document.getElementById("undoBtn");
-    setupBodyEl         = document.getElementById("setupBody");
-    toggleSetupBtnEl    = document.getElementById("toggleSetupBtn");
-    toggleSetupIconEl   = document.getElementById("toggleSetupIcon");
-    setupSummaryEl      = document.getElementById("setupSummary");
+// Add player
+document.getElementById("addPlayerBtn").addEventListener("click", () => {
+    players.push({ name: "", race: null, passed: false });
+    renderPlayers();
+});
 
-    raceModalBackdropEl = document.getElementById("raceModalBackdrop");
-    raceModalEl         = document.getElementById("raceModal");
-    raceGridEl          = document.getElementById("raceGrid");
-    closeRaceModalBtnEl = document.getElementById("closeRaceModalBtn");
-}
+// Render players
+function renderPlayers() {
+    playerList.innerHTML = "";
 
-function bindUiEvents() {
-    playerCountSelect.addEventListener("change", () => {
-        setPlayerCount(playerCountSelect.value);
-        renderSetupFromState();
-        renderOrderFromState();
-        updateSetupSummary();
-    });
-
-    startRoundBtn.addEventListener("click", () => {
-        randomisePlayerOrder();
-        renderSetupFromState();
-        renderOrderFromState();
-        hintTextEl.textContent = "Tap a player when they have taken their turn.";
-        playBeep("shuffle");
-        collapseSetupPanel();
-        updateSetupSummary();
-    });
-
-    quickSetupBtn.addEventListener("click", () => {
-        quickSetup();
-        renderSetupFromState();
-        renderOrderFromState();
-        playBeep("tap");
-        updateSetupSummary();
-    });
-
-    undoBtnEl.addEventListener("click", () => {
-        undoLastPass();
-        renderOrderFromState();
-        updateUndoVisibility();
-
-        hintTextEl.textContent = allPlayersPassed()
-            ? "Round complete. New order generated."
-            : "Tap a player when they have taken their turn.";
-
-        playBeep("tap");
-    });
-
-    toggleSetupBtnEl.addEventListener("click", () => {
-        const isCollapsed = setupBodyEl.classList.toggle("collapsed");
-        toggleSetupBtnEl.setAttribute("aria-expanded", String(!isCollapsed));
-        toggleSetupIconEl.textContent = isCollapsed ? "▸" : "▾";
-    });
-
-    closeRaceModalBtnEl.addEventListener("click", closeRaceModal);
-    raceModalBackdropEl.addEventListener("click", (e) => {
-        if (e.target === raceModalBackdropEl || e.target.dataset.closeModal === "race") {
-            closeRaceModal();
-        }
-    });
-
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && raceModalBackdropEl.classList.contains("visible")) {
-            closeRaceModal();
-        }
-    });
-}
-
-/* --------------------- QUICK SETUP ------------------------ */
-
-function quickSetup() {
-    const count = parseInt(playerCountSelect.value, 10) || 4;
-    setPlayerCount(count);
-    usedRaces.clear();
-
-    for (let i = 0; i < count; i++) {
-        const name = `Player ${i + 1}`;
-        const raceId = RACES[i % RACES.length].id;
-
-        setPlayerName(i, name);
-        setPlayerRace(i, raceId);
-    }
-}
-
-/* --------------------- SETUP PANEL ------------------------ */
-
-function renderSetupFromState() {
-    const count = parseInt(playerCountSelect.value, 10) || 4;
-    setPlayerCount(count);
-
-    playerRowsContainer.innerHTML = "";
-
-    for (let i = 0; i < count; i++) {
-        const p = players[i] || { name: "", raceId: null };
-
+    players.forEach((p, i) => {
         const row = document.createElement("div");
         row.className = "player-row";
 
-        const nameInput = document.createElement("input");
-        nameInput.type = "text";
-        nameInput.placeholder = `Player ${i + 1}`;
-        nameInput.value = p.name || "";
-        nameInput.addEventListener("input", (e) => {
-            setPlayerName(i, e.target.value);
-            updateSetupSummary();
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = `Player ${i + 1}`;
+        input.value = p.name;
+        input.addEventListener("input", () => {
+            p.name = input.value;
         });
 
         const raceBtn = document.createElement("button");
-        const race = p.raceId ? findRaceById(p.raceId) : null;
-        const raceName = race ? race.name : "Select race";
-        const colorClass = race ? race.colorClass : "faction-generic";
-        const glyphPath = race ? race.glyph : null;
+        raceBtn.textContent = p.race ? p.race.name : "Choose Race";
+        raceBtn.addEventListener("click", () => openRaceModal(i));
 
-        raceBtn.className = `race-chip ${colorClass}`;
-
-        const glyphHtml = glyphPath
-            ? `
-                <div class="race-chip-glyph">
-                    <img src="${glyphPath}" alt=""
-                         onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'race-chip-dot\'></span>';">
-                </div>
-              `
-            : `<span class="race-chip-dot"></span>`;
-
-        raceBtn.innerHTML = `
-            <div class="race-chip-inner">
-                ${glyphHtml}
-                <span>${raceName}</span>
-            </div>
-        `;
-
-        raceBtn.addEventListener("click", () => {
-            openRaceModalForPlayer(i);
-        });
-
-        row.appendChild(nameInput);
+        row.appendChild(input);
         row.appendChild(raceBtn);
-        playerRowsContainer.appendChild(row);
-    }
+        playerList.appendChild(row);
+    });
 
     updateSetupSummary();
 }
 
+// Setup summary
 function updateSetupSummary() {
-    const active = players.filter(p => p.name && p.raceId);
-    const count = active.length;
-    setupSummaryEl.textContent =
-        count === 0 ? "No players yet" :
-        count === 1 ? "1 player configured" :
-        `${count} players configured`;
+    const summary = document.getElementById("setupSummary");
+    summary.textContent = `${players.length} players configured`;
 }
 
-/* --------------------- ORDER LIST ------------------------ */
+// Race modal
+const raceModalBackdrop = document.getElementById("raceModalBackdrop");
+const raceGrid = document.getElementById("raceGrid");
+let raceSelectIndex = null;
 
-function updateTurnDisplay() {
-    turnDisplayEl.textContent = `Turn: ${turn}`;
+function openRaceModal(index) {
+    raceSelectIndex = index;
+    raceGrid.innerHTML = "";
+
+    RACES.forEach(r => {
+        const card = document.createElement("div");
+        card.className = "race-card";
+        card.innerHTML = `
+            <div class="race-card-main">
+                <div class="race-card-glyph"></div>
+                <div class="race-card-name">${r.name}</div>
+            </div>
+        `;
+        card.addEventListener("click", () => {
+            players[index].race = r;
+            raceModalBackdrop.classList.remove("visible");
+            renderPlayers();
+        });
+        raceGrid.appendChild(card);
+    });
+
+    raceModalBackdrop.classList.add("visible");
 }
 
-function renderOrderFromState() {
-    orderListEl.innerHTML = "";
+document.getElementById("closeRaceModalBtn").addEventListener("click", () => {
+    raceModalBackdrop.classList.remove("visible");
+});
 
-    const activePlayers = players
-        .map((p, idx) => ({ ...p, index: idx }))
-        .filter(p => p.name && p.raceId);
+// Start Game
+startGameBtn.addEventListener("click", () => {
+    if (players.length === 0) return;
 
-    activePlayers.forEach(p => {
+    document.body.classList.add("game-started");
+
+    randomiseOrder();
+    renderOrderList();
+
+    turnDisplay.textContent = "Round 1";
+    hintText.textContent = "Tap a player when they have taken their turn.";
+});
+
+// Randomise order
+function randomiseOrder() {
+    players = players
+        .map(p => ({ ...p, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(p => ({ name: p.name, race: p.race, passed: false }));
+}
+
+// Render order list
+function renderOrderList() {
+    orderList.innerHTML = "";
+
+    players.forEach((p, i) => {
         const li = document.createElement("li");
-        const race = findRaceById(p.raceId);
-        const colorClass = race ? race.colorClass : "faction-generic";
-        li.className = `order-item ${colorClass}`;
-
-        const passIndex = passedOrder.indexOf(p.name);
-        const hasPassed = passIndex !== -1;
-
-        const passLabel = hasPassed
-            ? `Passed ${ordinal(passIndex + 1)}`
-            : "Tap when done";
-
-        if (hasPassed) li.classList.add("passed");
+        li.className = "order-item";
 
         li.innerHTML = `
             <div class="order-item-main">
-                <span class="order-name">${p.name}</span>
-                <span class="order-race">${race ? race.name : ""}</span>
+                <div class="order-name">${p.name}</div>
+                <div class="order-race">${p.race ? p.race.name : ""}</div>
             </div>
-            <span class="order-status">${passLabel}</span>
+            <div class="order-status">${p.passed ? "Passed" : "Active"}</div>
         `;
 
         li.addEventListener("click", () => {
-            const wasCompleteBefore = allPlayersPassed();
-            markPassedByIndex(p.index);
-
-            renderOrderFromState();
-            updateTurnDisplay();
-            updateUndoVisibility();
-
-            if (allPlayersPassed() && !wasCompleteBefore) {
-                hintTextEl.textContent = "Round complete. New order generated.";
-                playBeep("shuffle");
-            } else if (!allPlayersPassed()) {
-                hintTextEl.textContent = "Tap a player when they have taken their turn.";
-                playBeep("tap");
-            }
+            p.passed = !p.passed;
+            renderOrderList();
         });
 
-        orderListEl.appendChild(li);
-    });
-
-    updateTurnDisplay();
-    updateUndoVisibility();
-}
-
-function ordinal(n) {
-    if (n === 1) return "1st";
-    if (n === 2) return "2nd";
-    if (n === 3) return "3rd";
-    return `${n}th`;
-}
-
-function updateUndoVisibility() {
-    undoBtnEl.style.display = passedOrder.length > 0 ? "inline-flex" : "none";
-}
-
-/* --------------------- SETUP PANEL COLLAPSE ------------------------ */
-
-function collapseSetupPanel() {
-    setupBodyEl.classList.add("collapsed");
-    toggleSetupBtnEl.setAttribute("aria-expanded", "false");
-    toggleSetupIconEl.textContent = "▸";
-}
-
-function expandSetupPanel() {
-    setupBodyEl.classList.remove("collapsed");
-    toggleSetupBtnEl.setAttribute("aria-expanded", "true");
-    toggleSetupIconEl.textContent = "▾";
-}
-
-/* --------------------- RACE MODAL ------------------------ */
-
-function openRaceModalForPlayer(playerIndex) {
-    raceModalCurrentIndex = playerIndex;
-    populateRaceGrid();
-    raceModalBackdropEl.classList.add("visible");
-}
-
-function closeRaceModal() {
-    raceModalBackdropEl.classList.remove("visible");
-    raceModalCurrentIndex = null;
-}
-
-function populateRaceGrid() {
-    raceGridEl.innerHTML = "";
-
-    RACES.forEach(race => {
-        const taken = !isRaceAvailable(race.id);
-        const card = document.createElement("button");
-        card.type = "button";
-        card.className = `race-card ${race.colorClass}`;
-        card.disabled = taken;
-
-        const status = taken ? `<div class="race-card-meta">Taken</div>` : "";
-
-        card.innerHTML = `
-            <div class="race-card-main">
-                <div class="race-card-glyph">
-                    <img src="${race.glyph}" alt="${race.name} glyph"
-                         onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'race-chip-dot\'></span>';">
-                </div>
-                <div>
-                    <div class="race-card-name">${race.name}</div>
-                    ${status}
-                </div>
-            </div>
-        `;
-
-        if (!taken) {
-            card.addEventListener("click", () => {
-                if (raceModalCurrentIndex != null) {
-                    setPlayerRace(raceModalCurrentIndex, race.id);
-                    renderSetupFromState();
-                    renderOrderFromState();
-                    playBeep("tap");
-                }
-                closeRaceModal();
-            });
-        }
-
-        raceGridEl.appendChild(card);
+        orderList.appendChild(li);
     });
 }
