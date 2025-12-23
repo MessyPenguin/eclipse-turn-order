@@ -148,6 +148,10 @@ button:disabled {
   font-weight: 800;
   color: var(--fg);
 }
+.race-option.disabled {
+  filter: grayscale(100%);
+  cursor: not-allowed;
+}
 
 /* Pass Buttons (order items) */
 
@@ -220,3 +224,4 @@ button:disabled {
 .order-item.passed .order-status {
   color: var(--success);
 }
+
