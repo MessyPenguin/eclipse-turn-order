@@ -1,19 +1,29 @@
 /* -----------------------------------------------------------
-   RACES + SIMPLE SELECTION LOGIC
+   RACE DATA + MODAL
 ----------------------------------------------------------- */
 
 const RACES = [
-    { id: "terran",   name: "Terran",   colorClass: "faction-terran" },
-    { id: "eridani",  name: "Eridani",  colorClass: "faction-eridani" },
-    { id: "planta",   name: "Planta",   colorClass: "faction-planta" },
-    { id: "hydran",   name: "Hydran",   colorClass: "faction-hydran" }
+    {
+        id: "terran",
+        name: "Terran",
+        description: "Balanced, flexible, straightforward.",
+        colorClass: "faction-terran",
+        glyph: "assets/glyphs/terran.png"
+    },
+    {
+        id: "planta",
+        name: "Planta",
+        description: "Growth, influence, map control.",
+        colorClass: "faction-planta",
+        glyph: "assets/glyphs/planta.png"
+    }
+    // You can add more races here later
 ];
 
 function findRaceById(id) {
     return RACES.find(r => r.id === id) || null;
 }
 
-/** Cycle through races when the race chip is clicked. */
 function getNextRaceId(currentId) {
     if (!currentId) return RACES[0].id;
     const idx = RACES.findIndex(r => r.id === currentId);
