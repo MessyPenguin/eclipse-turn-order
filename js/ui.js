@@ -33,7 +33,8 @@ let lastPassedPlayerId = null;
 let raceSelectPlayerIndex = null;
 
 // ---- INIT ----
-init();
+window.addEventListener("DOMContentLoaded", init);
+
 
 function init() {
   const defaultCount = parseInt(playerCountSelect.value, 10) || 4;
@@ -407,3 +408,4 @@ function formatOrdinal(n) {
 function cryptoRandomId() {
   return Math.random().toString(36).slice(2, 10);
 }
+
