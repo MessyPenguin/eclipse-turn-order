@@ -169,6 +169,14 @@ function renderRaceModal() {
   RACES.forEach(r => {
     const div = document.createElement("div");
     div.className = `race-option ${r.id}`;
+    const raceTaken = players.some(p => p.raceId === r.id);
+
+    if (raceTaken) {
+    div.classList.add("disabled");
+    div.style.opacity = "0.35";
+    div.style.pointerEvents = "none";
+  }
+
     div.innerHTML = `
       <img src="${r.glyph}" alt="${r.name}" />
       <div class="race-option-name">${r.name}</div>
@@ -431,6 +439,7 @@ function formatOrdinal(n) {
 function cryptoRandomId() {
   return Math.random().toString(36).slice(2, 10);
 }
+
 
 
 
