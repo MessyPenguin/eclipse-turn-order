@@ -1,6 +1,6 @@
 /* -----------------------------------------------------------
    FIREBASE INITIALISATION + SHARED GAME STATE
-   - Hidden auto-reset on first load (Option C)
+   - Hidden auto-reset on first load
    - Shared /gameState across all devices
 ----------------------------------------------------------- */
 
@@ -61,6 +61,7 @@ function applyGameStateRemote(state) {
 
     renderSetupFromState();
     renderOrderFromState();
+
     isApplyingRemoteState = false;
 }
 
