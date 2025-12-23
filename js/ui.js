@@ -10,6 +10,17 @@ let orderListEl;
 let hintTextEl;
 let turnDisplayEl;
 let undoBtnEl;
+let setupBodyEl;
+let toggleSetupBtnEl;
+let toggleSetupIconEl;
+let setupSummaryEl;
+
+// Race modal
+let raceModalBackdropEl;
+let raceModalEl;
+let raceGridEl;
+let closeRaceModalBtnEl;
+let raceModalCurrentIndex = null;
 
 function cacheDom() {
     playerCountSelect   = document.getElementById("playerCount");
@@ -20,6 +31,15 @@ function cacheDom() {
     hintTextEl          = document.getElementById("hintText");
     turnDisplayEl       = document.getElementById("turnDisplay");
     undoBtnEl           = document.getElementById("undoBtn");
+    setupBodyEl         = document.getElementById("setupBody");
+    toggleSetupBtnEl    = document.getElementById("toggleSetupBtn");
+    toggleSetupIconEl   = document.getElementById("toggleSetupIcon");
+    setupSummaryEl      = document.getElementById("setupSummary");
+
+    raceModalBackdropEl = document.getElementById("raceModalBackdrop");
+    raceModalEl         = document.getElementById("raceModal");
+    raceGridEl          = document.getElementById("raceGrid");
+    closeRaceModalBtnEl = document.getElementById("closeRaceModalBtn");
 }
 
 function bindUiEvents() {
@@ -27,6 +47,7 @@ function bindUiEvents() {
         setPlayerCount(playerCountSelect.value);
         renderSetupFromState();
         renderOrderFromState();
+        updateSetupSummary();
     });
 
     startRoundBtn.addEventListener("click", () => {
@@ -35,6 +56,8 @@ function bindUiEvents() {
         renderOrderFromState();
         hintTextEl.textContent = "Tap a player when they have taken their turn.";
         playBeep("shuffle");
+        collapseSetupPanel();
+        updateSetupSummary();
     });
 
     quickSetupBtn.addEventListener("click", () => {
@@ -42,6 +65,7 @@ function bindUiEvents() {
         renderSetupFromState();
         renderOrderFromState();
         playBeep("tap");
+        updateSetupSummary();
     });
 
     undoBtnEl.addEventListener("click", () => {
@@ -53,9 +77,29 @@ function bindUiEvents() {
             : "Tap a player when they have taken their turn.";
         playBeep("tap");
     });
+
+    toggleSetupBtnEl.addEventListener("click", () => {
+        const isCollapsed = setupBodyEl.classList.toggle("collapsed");
+        toggleSetupBtnEl.setAttribute("aria-expanded", String(!isCollapsed));
+        toggleSetupIconEl.textContent = isCollapsed ? "▸" : "▾";
+    });
+
+    // Modal close controls
+    closeRaceModalBtnEl.addEventListener("click", closeRaceModal);
+    raceModalBackdropEl.addEventListener("click", (e) => {
+        if (e.target === raceModalBackdropEl || e.target.dataset.closeModal === "race") {
+            closeRaceModal();
+        }
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && raceModalBackdropEl.classList.contains("visible")) {
+            closeRaceModal();
+        }
+    });
 }
 
-/** Set up a simple quick-setup: generic names + sequential races */
+/** Quick-setup: generic names + sequential races. */
 function quickSetup() {
     const count = parseInt(playerCountSelect.value, 10) || 4;
     setPlayerCount(count);
@@ -86,35 +130,59 @@ function renderSetupFromState() {
         nameInput.value = p.name || "";
         nameInput.addEventListener("input", (e) => {
             setPlayerName(i, e.target.value);
+            updateSetupSummary();
         });
 
         const raceBtn = document.createElement("button");
         const race = p.raceId ? findRaceById(p.raceId) : null;
-        const raceId = race ? race.id : null;
-        const raceName = race ? race.name : "Pick race";
+        const raceName = race ? race.name : "Select race";
         const colorClass = race ? race.colorClass : "faction-generic";
+        const glyphPath = race ? race.glyph : null;
+
         raceBtn.className = `race-chip ${colorClass}`;
+
+        const glyphHtml = glyphPath
+            ? `<div class="race-chip-glyph"><img src="${glyphPath}" alt=""></div>`
+            : `<span class="race-chip-dot"></span>`;
+
         raceBtn.innerHTML = `
-            <span class="race-dot"></span>
-            <span>${raceName}</span>
+            <div class="race-chip-inner">
+                ${glyphHtml}
+                <span>${raceName}</span>
+            </div>
         `;
+
         raceBtn.addEventListener("click", () => {
-            const nextId = getNextRaceId(p.raceId);
-            setPlayerRace(i, nextId);
-            renderSetupFromState();
-            renderOrderFromState();
+            openRaceModalForPlayer(i);
         });
 
         row.appendChild(nameInput);
         row.appendChild(raceBtn);
         playerRowsContainer.appendChild(row);
     }
+
+    updateSetupSummary();
 }
 
+/** Update hint summary under "Setup". */
+function updateSetupSummary() {
+    const filled = players.filter(p => p.name && p.raceId);
+    const count = filled.length;
+    if (count === 0) {
+        setupSummaryEl.textContent = "No players yet";
+    } else if (count === 1) {
+        setupSummaryEl.textContent = "1 player configured";
+    } else {
+        setupSummaryEl.textContent = `${count} players configured`;
+    }
+}
+
+/** Turn display text. */
 function updateTurnDisplay() {
     turnDisplayEl.textContent = `Turn: ${turn}`;
 }
 
+/** Render order list from players + passedOrder. */
 function renderOrderFromState() {
     orderListEl.innerHTML = "";
 
@@ -162,6 +230,68 @@ function renderOrderFromState() {
     updateUndoVisibility();
 }
 
+/** Undo button visibility. */
 function updateUndoVisibility() {
     undoBtnEl.style.display = passedOrder.length > 0 ? "inline-flex" : "none";
+}
+
+/** Collapses the setup panel. */
+function collapseSetupPanel() {
+    setupBodyEl.classList.add("collapsed");
+    toggleSetupBtnEl.setAttribute("aria-expanded", "false");
+    toggleSetupIconEl.textContent = "▸";
+}
+
+/** Expands the setup panel. */
+function expandSetupPanel() {
+    setupBodyEl.classList.remove("collapsed");
+    toggleSetupBtnEl.setAttribute("aria-expanded", "true");
+    toggleSetupIconEl.textContent = "▾";
+}
+
+/* --------------------- Race Modal ------------------------ */
+
+function openRaceModalForPlayer(playerIndex) {
+    raceModalCurrentIndex = playerIndex;
+    populateRaceGrid();
+    raceModalBackdropEl.classList.add("visible");
+}
+
+function closeRaceModal() {
+    raceModalBackdropEl.classList.remove("visible");
+    raceModalCurrentIndex = null;
+}
+
+/** Populate race selection grid. */
+function populateRaceGrid() {
+    raceGridEl.innerHTML = "";
+    RACES.forEach(race => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = `race-card ${race.colorClass}`;
+
+        card.innerHTML = `
+            <div class="race-card-main">
+                <div class="race-card-glyph">
+                    <img src="${race.glyph}" alt="${race.name} glyph">
+                </div>
+                <div>
+                    <div class="race-card-name">${race.name}</div>
+                    <div class="race-card-meta">${race.description}</div>
+                </div>
+            </div>
+        `;
+
+        card.addEventListener("click", () => {
+            if (raceModalCurrentIndex != null) {
+                setPlayerRace(raceModalCurrentIndex, race.id);
+                renderSetupFromState();
+                renderOrderFromState();
+                playBeep("tap");
+            }
+            closeRaceModal();
+        });
+
+        raceGridEl.appendChild(card);
+    });
 }
