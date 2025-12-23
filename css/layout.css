@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------
-   LAYOUT — Page Structure, Panels, Modal Backdrop, Grid Layout
+   LAYOUT — Guaranteed Centered Column Layout
 ----------------------------------------------------------- */
 
 :root {
@@ -22,6 +22,7 @@
 
 /* -------------------- Page Layout -------------------- */
 
+/* Force body to centre everything */
 body {
     margin: 0;
     padding: 0;
@@ -30,17 +31,24 @@ body {
     font-family: system-ui, sans-serif;
 
     display: flex;
-    justify-content: center;     /* Center horizontally */
-    padding-top: 20px;
+    justify-content: center;   /* horizontal centering */
+    align-items: flex-start;   /* top aligned */
+    min-height: 100vh;         /* full height */
 }
 
+/* The main column */
 main {
     width: 100%;
-    max-width: 600px;            /* Center column width */
-    padding: 0 16px 40px;
+    max-width: 600px;          /* centre column width */
+    padding: 20px 16px 40px;
+
     display: flex;
     flex-direction: column;
     gap: 20px;
+
+    /* This guarantees centring even if parent styles interfere */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* -------------------- Setup Panel -------------------- */
@@ -62,7 +70,6 @@ main {
 
 #setupBody {
     margin-top: 12px;
-    display: block;
 }
 
 #setupBody.collapsed {
@@ -81,9 +88,11 @@ main {
     list-style: none;
     padding: 0;
     margin: 0;
+
     display: flex;
     flex-direction: column;
     gap: 10px;
+
     width: 100%;
 }
 
