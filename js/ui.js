@@ -201,7 +201,7 @@ function openRaceModal(playerIndex) {
 
   RACES.forEach(r => {
     const card = document.createElement("div");
-    card.className = "race-card";
+    card.className = "race-option ${r.id}";
 
     const main = document.createElement("div");
     main.className = "race-card-main";
@@ -439,6 +439,7 @@ function formatOrdinal(n) {
 function cryptoRandomId() {
   return Math.random().toString(36).slice(2, 10);
 }
+
 
 
 
