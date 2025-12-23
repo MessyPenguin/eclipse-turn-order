@@ -34,7 +34,7 @@ main {
 }
 
 /* -----------------------------------------------------------
-   SETUP PANEL — FIXED (no collapsing, no blocking input)
+   SETUP PANEL — FIXED (visible, stable, no collapsing)
 ----------------------------------------------------------- */
 
 #setupPanel {
