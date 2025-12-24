@@ -64,26 +64,89 @@ button:disabled {
 
 /* Player Rows in Setup */
 
+/* -----------------------------------------------------------
+   SETUP ROW — tuned for clean alignment & sci‑fi polish
+----------------------------------------------------------- */
+
 .player-row {
   display: grid;
-  grid-template-columns: 1fr auto; /* make name input wider */
-  gap: 8px;
-  align-items: center;
-  padding: 12px 14px;
-  border-radius: var(--radius-sm);
-  background: rgba(5, 7, 15, 0.92);
-  border: 1px solid rgba(60, 70, 110, 0.7);
+  grid-template-columns: 1fr auto;
+  align-items: center;          /* vertically align input + button */
+  gap: 14px;                    /* balanced spacing */
+  padding: 14px 16px;           /* comfortable tablet touch zone */
+  margin-bottom: 14px;
+
+  background: rgba(18, 20, 32, 0.75);
+  border: 1px solid rgba(110, 130, 180, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 10px rgba(80,120,255,0.12);
+
+  transition: box-shadow 0.15s ease, transform 0.12s ease;
 }
 
-.player-row input[type="text"] {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid white;
-  background: #050712;
-  color: var(--fg);
-  font-size: 1.1rem;
+.player-row:focus-within {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.55), 0 0 14px rgba(78,201,240,0.18);
 }
+
+/* Player name input */
+.player-name-input {
+  all: unset;                   /* reset browser + global styles */
+  box-sizing: border-box;
+
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1.05rem;
+  font-family: "Rajdhani", system-ui, sans-serif;
+
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(150, 150, 200, 0.4);
+  border-radius: 6px;
+  color: var(--fg);
+
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.player-name-input:focus {
+  border-color: rgba(78,201,240,0.6);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Choose Race button — fully isolated from global button styles */
+.choose-race-btn {
+  all: unset;                   /* critical: prevents global button bleed */
+  box-sizing: border-box;
+
+  padding: 12px 18px;
+  height: 48px;
+  min-width: 150px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  background: linear-gradient(180deg, rgba(20,60,120,0.9), rgba(8,14,28,0.95));
+  border: 1px solid rgba(40,90,180,0.9);
+  border-radius: 8px;
+
+  font-size: 1rem;
+  font-family: "Rajdhani", system-ui, sans-serif;
+  color: var(--fg);
+
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.choose-race-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.choose-race-btn:active {
+  transform: translateY(0);
+}
+
+
 
 /* Focus and hover states for keyboard users */
 button:focus-visible,

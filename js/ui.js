@@ -118,8 +118,10 @@ function renderSetupPlayers() {
     const row = document.createElement("div");
     row.className = "player-row";
 
+    // --- Name input ---
     const nameInput = document.createElement("input");
     nameInput.type = "text";
+    nameInput.className = "player-name-input";
     nameInput.placeholder = `Player ${idx + 1}`;
     nameInput.value = p.name;
     nameInput.addEventListener("input", () => {
@@ -127,9 +129,10 @@ function renderSetupPlayers() {
       updateSetupSummary();
     });
 
+    // --- Choose Race button ---
     const chooseRaceBtn = document.createElement("button");
     chooseRaceBtn.type = "button";
-    chooseRaceBtn.className = "race-select-button";
+    chooseRaceBtn.className = "choose-race-btn";
     chooseRaceBtn.setAttribute("aria-haspopup", "dialog");
     chooseRaceBtn.setAttribute("aria-expanded", "false");
 
@@ -145,12 +148,15 @@ function renderSetupPlayers() {
 
     chooseRaceBtn.addEventListener("click", () => openRaceModal(idx));
 
+    // --- Assemble row ---
     row.appendChild(nameInput);
     row.appendChild(chooseRaceBtn);
 
     playerListEl.appendChild(row);
   });
 }
+
+
 
 function updateSetupSummary() {
   const count = players.length;
