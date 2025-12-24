@@ -136,21 +136,10 @@ function renderSetupPlayers() {
     const raceSummary = document.createElement("div");
     raceSummary.className = "player-race-summary";
 
-    const glyphDiv = document.createElement("div");
-    glyphDiv.className = "player-race-glyph";
-    // always show a glyph; use Terran as a neutral placeholder when none chosen
-    const img = document.createElement("img");
-    const placeholder = 'assets/glyphs/terran.png';
-    img.src = p.glyph || placeholder;
-    img.alt = p.raceName || (p.glyph ? 'Race glyph' : 'Terran placeholder');
-    if (!p.glyph) img.classList.add('placeholder');
-    glyphDiv.appendChild(img);
-
     const raceNameSpan = document.createElement("span");
     raceNameSpan.className = "player-race-name";
     raceNameSpan.textContent = p.raceName || "Choose Race";
 
-    raceSummary.appendChild(glyphDiv);
     raceSummary.appendChild(raceNameSpan);
     chooseRaceBtn.appendChild(raceSummary);
 

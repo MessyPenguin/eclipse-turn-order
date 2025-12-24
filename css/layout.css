@@ -359,8 +359,8 @@ body.game-started #gamePanel {
 .order-item.race-exiles      { border-color: #00e0ff; box-shadow: 0 8px 28px #00e0ff16; }
 .order-item.race-magellan    { border-color: #ff7b00; box-shadow: 0 8px 28px #ff7b0016; }
 .order-item.race-rhoindi     { border-color: #ff66cc; box-shadow: 0 8px 28px #ff66cc16; }
-.order-item.race-draco       { border-color: #aa00ff; box-shadow: 0 8px 28px #aa00ff16; }
-.order-item.race-eridani     { border-color: #ffaa00; box-shadow: 0 8px 28px #ffaa0016; }
+.order-item.race-draco       { border-color: #ffff00; box-shadow: 0 8px 28px #ffff0016; }
+.order-item.race-eridani     { border-color: #ff0000; box-shadow: 0 8px 28px #ff000016; }
 .order-item.race-lyra        { border-color: #66aaff; box-shadow: 0 8px 28px #66aaff16; }
 
 /* accent the glyph area with a faint glow matching faction */
@@ -372,8 +372,8 @@ body.game-started #gamePanel {
 .order-item.race-exiles .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #00e0ff22; pointer-events: none; }
 .order-item.race-magellan .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #ff7b0022; pointer-events: none; }
 .order-item.race-rhoindi .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #ff66cc22; pointer-events: none; }
-.order-item.race-draco .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #aa00ff22; pointer-events: none; }
-.order-item.race-eridani .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #ffaa0022; pointer-events: none; }
+.order-item.race-draco .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #ffff0022; pointer-events: none; }
+.order-item.race-eridani .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #ff000022; pointer-events: none; }
 .order-item.race-lyra .order-glyph::after { content: ''; position: absolute; inset: -6px; border-radius: 10px; box-shadow: 0 0 18px #66aaff22; pointer-events: none; }
 
 /* ensure order-glyph is positioned for pseudo-element */
@@ -487,8 +487,19 @@ body.game-started #gamePanel {
   word-break: break-word;
 }
 
-/* -----------------------------------------------------------
-   FACTION COLOUR GLOWS (modal and order items use these colors now)
+@media (max-width: 480px) {
+  body { font-size: 14px; }
+  .app-title { font-size: 2rem; }
+  main { padding: 16px 16px 32px; }
+  .app { padding: 12px 12px 18px; margin: 8px auto 16px; }
+  .topbar { padding: 12px 16px 4px; gap: 8px; }
+  .topbar-actions { flex-wrap: wrap; gap: 8px; }
+  .order-item { padding: 8px 12px; min-height: 40px; }
+  .order-glyph img { width: 32px; height: 32px; }
+  .order-name { font-size: 1rem; }
+  .order-race { font-size: 0.85rem; }
+  .order-status { font-size: 0.9rem; }
+}
 ----------------------------------------------------------- */
 
 .race-option.terran      { border-color: #4da3ff; box-shadow: 0 0 12px #4da3ff55; }
@@ -499,6 +510,8 @@ body.game-started #gamePanel {
 .race-option.exiles      { border-color: #00e0ff; box-shadow: 0 0 12px #00e0ff55; }
 .race-option.magellan    { border-color: #ff7b00; box-shadow: 0 0 12px #ff7b0055; }
 .race-option.rhoindi     { border-color: #ff66cc; box-shadow: 0 0 12px #ff66cc55; }
+.race-option.draco       { border-color: #ffff00; box-shadow: 0 0 12px #ffff0055; }
+.race-option.eridani     { border-color: #ff0000; box-shadow: 0 0 12px #ff000055; }
 .race-option.enclave     { border-color: #b3b3b3; box-shadow: 0 0 12px #b3b3b355; }
 .race-option.wardens     { border-color: #66ffcc; box-shadow: 0 0 12px #66ffcc55; }
 .race-option.shapers     { border-color: #ff66ff; box-shadow: 0 0 12px #ff66ff55; }

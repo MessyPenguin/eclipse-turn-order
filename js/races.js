@@ -3,18 +3,18 @@
 ----------------------------------------------------------- */
 
 const RACES = [
-  // Base Game
-  { id: "terran", name: "Terran Federation", glyph: "assets/glyphs/terran.png" },
-  { id: "planta", name: "Planta", glyph: "assets/glyphs/planta.png" },
-  { id: "hydran", name: "Hydran Progress", glyph: "assets/glyphs/hydran.png" },
-  { id: "orion", name: "Orion Hegemony", glyph: "assets/glyphs/orion.png" },
-  { id: "mechanema", name: "Mechanema", glyph: "assets/glyphs/mechanema.png" },
-  { id: "exiles", name: "The Exiles", glyph: "assets/glyphs/exiles.png" },
-  { id: "magellan", name: "Wardens of Magellan", glyph: "assets/glyphs/magellan.png" },
-  { id: "rhoindi", name: "Rho Indi Syndicate", glyph: "assets/glyphs/rhoindi.png" },
+  // Base Game (alphabetical)
   { id: "draco", name: "Descentdants of Draco", glyph: "assets/glyphs/draco.png" },
   { id: "eridani", name: "Eridani Empire", glyph: "assets/glyphs/eridani.png" },
+  { id: "exiles", name: "The Exiles", glyph: "assets/glyphs/exiles.png" },
+  { id: "hydran", name: "Hydran Progress", glyph: "assets/glyphs/hydran.png" },
   { id: "lyra", name: "Enlightened of Lyra", glyph: "assets/glyphs/lyra.png" },
+  { id: "magellan", name: "Wardens of Magellan", glyph: "assets/glyphs/magellan.png" },
+  { id: "mechanema", name: "Mechanema", glyph: "assets/glyphs/mechanema.png" },
+  { id: "orion", name: "Orion Hegemony", glyph: "assets/glyphs/orion.png" },
+  { id: "planta", name: "Planta", glyph: "assets/glyphs/planta.png" },
+  { id: "rhoindi", name: "Rho Indi Syndicate", glyph: "assets/glyphs/rhoindi.png" },
+  { id: "terran", name: "Terran Federation", glyph: "assets/glyphs/terran.png" },
   
 ];
 
